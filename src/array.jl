@@ -1,7 +1,35 @@
+export AArray
+
+# +AArray, API L:AArray
+#
+# This is the array type to use in place of built-in Julia =Array{T,N}= types.
+#
+# *Parameters*:
+#
+# - =AIDX= is an extra parameter defining how [[AFloat][]] indices are
+#   stored. This type can be different from =P=. For instance in case
+#   of sparse matrix, only an uni-dimensional array to store indices
+#   associated to non-zero components is required, no need to the
+#   store sparsity pattern twice. 
+#
+# *Design*:
+# - [[id:c39435d9-532c-4390-8089-bde4c5e53f3e][Multiple parameters in the struct definition]]
+# 
 struct AArray{AT<:AFloat,N,P<:AbstractArray,AIDX}  <: AbstractArray{AT,N}
     parent::P
     aidx::AIDX
 
+    # +AArray, API
+    #
+    # Construction from an "usual" Julia array of real numbers.
+    #
+    # Usage example:
+    #
+    # !AArray(rand(2,1))
+    #
+    # *Design*:
+    # - [[id:b384f347-8c27-42ae-9759-2914d67cad4d][Restricted set of constructors]]
+    #
     function AArray(p::Array{T,N}) where {T<:AbstractFloat,N} 
         aidx=similar(p,Int)
         const n_chunk = length(p)
@@ -11,13 +39,23 @@ struct AArray{AT<:AFloat,N,P<:AbstractArray,AIDX}  <: AbstractArray{AT,N}
         return new{AFloat{T},N,typeof(p),typeof(aidx)}(p,aidx)
     end 
 end
-# return initial size 
+
+# +AArray, Internal
+#
+# This function increase array size by =positive_integer= and returns
+# the initial size
+#
 function increase_size!(v::Array{T,1},positive_integer::Int)::Int where {T}
     n=length(v)
     resize!(v,n+positive_integer)
     return n
 end 
 
+# +AArray, Internal
+#
+# This function allocate a chunk of =chunk_n= new [[AFloat][]].
+# It returns the index of the first one.
+#
 function create_tape_chunk(tape::Tape{T},chunk_n::Int) where {T}
     const init_offset_n = increase_size!(tape.i_offset,chunk_n)
     const init_dϕ_n = increase_size!(tape.dϕ,chunk_n)
@@ -30,10 +68,43 @@ function create_tape_chunk(tape::Tape{T},chunk_n::Int) where {T}
     
     return init_offset_n
 end
+
+
+
+# +AArray, Internal
+#
+# The recommended way to access aidx member *type*
+#
+# See [[id:c39435d9-532c-4390-8089-bde4c5e53f3e][Multiple parameters in the struct definition]]
+#
 aidx_type(::Type{AArray{AT,N,P,AIDX}}) where {AT,N,P,AIDX} = AIDX
-parent_type(::Type{AArray{AT,N,P,AIDX}}) where {AT,N,P,AIDX} = P
-parent(aa::AArray) = aa.parent
+
+# +AArray, Internal
+#
+# The recommended way to access aidx member
+#
+# See [[id:c39435d9-532c-4390-8089-bde4c5e53f3e][Multiple parameters in the struct definition]]
+#
 aidx(aa::AArray) = aa.aidx
+
+# +AArray, Internal
+#
+# The recommended way to access parent member *type*
+#
+# See [[id:c39435d9-532c-4390-8089-bde4c5e53f3e][Multiple parameters in the struct definition]]
+#
+parent_type(::Type{AArray{AT,N,P,AIDX}}) where {AT,N,P,AIDX} = P
+
+# +AArray, Internal
+#
+# The recommended way to access parent membe
+#
+# See [[id:c39435d9-532c-4390-8089-bde4c5e53f3e][Multiple parameters in the struct definition]]
+#
+parent(aa::AArray) = aa.parent
+
+
+
 Base.size(aa::AArray) = size(parent(aa))
 Base.IndexStyle(::Type{<:AArray{AT,N,P,AIDX}}) where {AT,N,P,AIDX} = IndexStyle(P)
 Base.getindex(aa::AArray{AT}, i::Int) where {AT} = AT(getindex(parent(aa),i),getindex(aidx(aa),i))

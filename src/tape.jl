@@ -5,7 +5,7 @@ struct ∂_j{T<:Real}
     j::Int 
 end
 
-# +Tape, Internal
+# +Tape, Internal L:Tape 
 #
 # Used to store $d\Phi^{(m)}$ using a storage scheme close to the
 # Compressed Row Storage (CRS)
@@ -30,6 +30,12 @@ function Tape{T<:AbstractFloat}(::Type{T},tape_initial_size::Int = 100)
     resize!(t.dϕ,0)
     return t
 end
+
+
+# +AFloat,API L:AFloat
+#
+# Specialization of number alllowing to track and record operations in the [[Tape][]]
+#
 struct AFloat{T<:AbstractFloat} <: Real
     value::T
     j::Int 
