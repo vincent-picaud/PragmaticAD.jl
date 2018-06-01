@@ -6,6 +6,7 @@ using Base.Test
     import PragmaticAD: Tape,afloat_next_index,afloat_count,get_tape
     
     include("tape.jl")
+    include("function.jl")
     include("array.jl")
 
 end;

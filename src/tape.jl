@@ -42,7 +42,8 @@ end
 #
 # Specialization of number alllowing to track and record operations in the [[Tape][]]
 #
-struct AFloat{T<:AbstractFloat} <: Real
+# - TODO [ ] support complex numbers (use [[https://en.wikipedia.org/wiki/Wirtinger_derivatives][Wirtinger_derivatives]]).
+struct AFloat{T<:AbstractFloat} <: Number
     value::T
     j::Int 
 end
@@ -52,6 +53,8 @@ end
 # Creates a new [[AFloat][]] from its value.
 #
 AFloat{T}(value::S) where {T<:AbstractFloat,S<:Real} = create_tape_record(get_tape(T),convert(T,value))
+# +AFloat,API
+AFloat(value::T) where {T<:AbstractFloat} = AFloat{T}(value)
 
 
 
@@ -194,12 +197,14 @@ f_gradient{T}(y::AFloat{T},stop_at_tape_position::Int)=f_gradient(get_tape(T),y.
 #
 # See: [[id:66703b8c-0f31-49db-bf41-268758ac27a9][Specialization of common functions]]
 #
+# Also: to be compared with ugly C++ macros.
+#
 for op = (:(==), :(!=), :(<), :(>), :(<=), :(>=))
     @eval begin
         import Base: ($op)
         ($op)(x1::AFloat{T},x2::AFloat{T}) where {T} = ($op)(x1.value,x2.value)
-        ($op)(x1::AFloat{T},x2::Number) where {T} = ($op)(x1.value,x2)
-        ($op)(x1::Number,x2::AFloat{T}) where {T} = ($op)(x1,x2.value)
+        ($op)(x1::AFloat{T},x2::Real) where {T} = ($op)(x1.value,x2)
+        ($op)(x1::Real,x2::AFloat{T}) where {T} = ($op)(x1,x2.value)
     end
 end
 
@@ -207,6 +212,7 @@ end
 ###################
 # Unary functions #
 ###################
+
 
 function Base.sin{T}(x::AFloat{T})::AFloat{T}
     const value = sin(x.value)
