@@ -1,3 +1,8 @@
+# +API
+#
+# Exported symbols
+export AFloat, afloat_count
+
 # +Tape, Internal
 # Used to store partial derivatives $\partial_j$
 struct ∂_j{T<:Real}

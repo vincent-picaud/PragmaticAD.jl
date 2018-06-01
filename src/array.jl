@@ -1,5 +1,8 @@
 export AArray
 
+# +Internal
+import Base: setindex!,getindex,size,IndexStyle
+    
 # +AArray, API L:AArray
 #
 # This is the array type to use in place of built-in Julia =Array{T,N}= types.
@@ -105,16 +108,43 @@ parent(aa::AArray) = aa.parent
 
 
 
-Base.size(aa::AArray) = size(parent(aa))
-Base.IndexStyle(::Type{<:AArray{AT,N,P,AIDX}}) where {AT,N,P,AIDX} = IndexStyle(P)
-Base.getindex(aa::AArray{AT}, i::Int) where {AT} = AT(getindex(parent(aa),i),getindex(aidx(aa),i))
-# CAVEAT: my first attempt was to write getindex(parent(aa),I)
-# ERROR: ArgumentError: invalid index: (1, 1)
-# Stacktrace:
-#  [1] getindex(::Array{Float64,2}, ::Tuple{Int64,Int64}) at ./abstractarray.jl:883
-@inline Base.getindex(aa::AArray{AT,N,P}, I::Vararg{Int, N}) where {AT,N,P} = AT(getindex(parent(aa),I...),getindex(aidx(aa),I...))
 
-@inline function Base.setindex!(aa::AArray{AT,N}, v::AT, I::Vararg{Int, N}) where {AT,N} 
+# +AArray
+#
+# *Design*:
+# - [[id:1b16ffef-47fa-473c-b033-de4a864dcaf3][Interface, main methods to redefine]]
+#
+size(aa::AArray) = size(parent(aa))
+
+# +AArray
+#
+# *Design*:
+# - [[id:1b16ffef-47fa-473c-b033-de4a864dcaf3][Interface, main methods to redefine]]
+#
+IndexStyle(::Type{<:AArray{AT,N,P,AIDX}}) where {AT,N,P,AIDX} = IndexStyle(P)
+
+# +AArray
+#
+# *Design*:
+# - [[id:1b16ffef-47fa-473c-b033-de4a864dcaf3][Interface, main methods to redefine]]
+#
+getindex(aa::AArray{AT}, i::Int) where {AT} = AT(getindex(parent(aa),i),getindex(aidx(aa),i))
+
+
+# +AArray
+#
+# *Design*:
+# - [[id:1b16ffef-47fa-473c-b033-de4a864dcaf3][Interface, main methods to redefine]]
+# - [[id:ffb7408e-cb7b-4c7e-a1f8-39c3af3d37d5][Remark]]
+#
+@inline getindex(aa::AArray{AT,N,P}, I::Vararg{Int, N}) where {AT,N,P} = AT(getindex(parent(aa),I...),getindex(aidx(aa),I...))
+
+# +AArray
+#
+# *Design*:
+# - [[id:1b16ffef-47fa-473c-b033-de4a864dcaf3][Interface, main methods to redefine]]
+#
+@inline function setindex!(aa::AArray{AT,N}, v::AT, I::Vararg{Int, N}) where {AT,N} 
     checkbounds(parent(aa), i)
     # @inbound
     setindex!(aidx(aa),v.j,I...)
@@ -122,14 +152,24 @@ Base.getindex(aa::AArray{AT}, i::Int) where {AT} = AT(getindex(parent(aa),i),get
     return v
 end
 
-@inline function Base.setindex!(aa::AArray{AT,N}, v, I::Vararg{Int, N}) where {AT,N} 
+# +AArray
+#
+# *Design*:
+# - [[id:1b16ffef-47fa-473c-b033-de4a864dcaf3][Interface, main methods to redefine]]
+#
+@inline function setindex!(aa::AArray{AT,N}, v, I::Vararg{Int, N}) where {AT,N} 
     av=AT(v)
     setindex!(aa,av,I)
     return av
 end 
-# function Base.similar(aa::AArray{T,N,P}, ::Type{TS}, dims::Dims) where {T,TS,N,P}
+
+
+
+# function similar(aa::AArray{T,N,P}, ::Type{TS}, dims::Dims) where {T,TS,N,P}
 #     return similar(parent(A), T, dims)
 # end
+
+
 Base.convert(::Type{AFloat{T}}, x::Integer) where {T<:AbstractFloat} = AFloat{T}(x)
 Base.promote_rule(::Type{AFloat{T}}, ::Type{S}) where {T<:AbstractFloat,S<:AbstractFloat} = AFloat{T}
 Base.promote_rule(::Type{AFloat{T}}, ::Type{S}) where {T<:AbstractFloat,S<:Integer} =  AFloat{T}

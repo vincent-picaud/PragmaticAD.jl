@@ -27,13 +27,13 @@ initialize_boxing_module(usedModules=["PragmaticAD"])
 
 * API documentation 
 
-#+BEGIN_SRC julia :results output drawer :eval no-export :exports results
+  #+BEGIN_SRC julia :results output drawer :eval no-export :exports results
 documented_items=create_documented_item_array_dir("~/GitHub/PragmaticAD.jl/src/");
 print_org_doc(documented_items,tag="API",header_level=0)
-#+END_SRC
+  #+END_SRC
 
-#+RESULTS:
-:RESULTS:
+  #+RESULTS:
+  :RESULTS:
 
 <<iKkCchMr>> *Index:* *[A]* [[bXIf1ThZ][AArray]], [[XrCKNICr][AFloat]] 
 - @@latex:\phantomsection@@ *=AArray=*  <<bXIf1ThZ>> <<pGeIM1vnAArray>>
@@ -94,219 +94,246 @@ struct AFloat{T<:AbstractFloat} <: Real
 Specialization of number alllowing to track and record operations in the _struct Tape_
 #+END_QUOTE
 [[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::35][tape.jl:35]], [[iKkCchMr][back to index]]
-:END:
+  :END:
 
 * Internal documentation
 
-#+BEGIN_SRC julia :results output drawer :eval no-export :exports results
+  #+BEGIN_SRC julia :results output drawer :eval no-export :exports results
 documented_items=create_documented_item_array_dir("~/GitHub/PragmaticAD.jl/src/");
 print_org_doc(documented_items,link_prefix="All_", header_level=0)
-#+END_SRC
+  #+END_SRC
 
-#+RESULTS:
-:RESULTS:
+  #+RESULTS:
+  :RESULTS:
+  WARNING: Method definition size(PragmaticAD.AArray{AT, N, P, AIDX} where AIDX where P<:(AbstractArray{T, N} where N where T) where N where AT<:(PragmaticAD.AFloat{T} where T<:AbstractFloat)) in module PragmaticAD at /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:64 overwritten at /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:117.
+  WARNING: Method definition (::Type{Base.IndexStyle})(Type{#s48} where #s48<:PragmaticAD.AArray{AT, N, P, AIDX}) in module PragmaticAD at /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:65 overwritten at /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:124.
+  WARNING: Method definition getindex(PragmaticAD.AArray{AT, N, P, AIDX} where AIDX where P<:(AbstractArray{T, N} where N where T) where N, Int64) in module PragmaticAD at /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:66 overwritten at /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:131.
+  WARNING: Method definition getindex(PragmaticAD.AArray{AT, N, P, AIDX} where AIDX, Int64...) in module PragmaticAD at /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:71 overwritten at /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:140.
+  WARNING: Method definition setindex!(PragmaticAD.AArray{AT, N, P, AIDX} where AIDX where P<:(AbstractArray{T, N} where N where T), AT, Int64...) in module PragmaticAD at /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:74 overwritten at /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:148.
+  WARNING: Method definition setindex!(PragmaticAD.AArray{AT, N, P, AIDX} where AIDX where P<:(AbstractArray{T, N} where N where T), Any, Int64...) in module PragmaticAD at /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:82 overwritten at /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:161.
+  # =WARNING:= cannot interpret /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:3 AssertionError("code != nothing")
+  # =WARNING:= cannot interpret /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:134 AssertionError("code != nothing")
+  # =WARNING:= cannot interpret /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:142 AssertionError("code != nothing")
+  # =WARNING:= cannot interpret /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:155 AssertionError("code != nothing")
+  <<2ZKqv4Ic>> *Index:* *[A]* [[Cf4xzzph][AArray]], [[AuWonEhQ][AFloat]] *[I]* [[qCCVhSyu][IndexStyle]] *[T]* [[wGS8Ebmm][Tape]] *[a]* [[Zw3esf8U][afloat_next_index]], [[36Id32AX][aidx]], [[LwCy8wq9][aidx_type]] *[c]* [[l85N21ue][create_tape_chunk]] *[g]* [[QnLtuYua][getindex]] *[i]* [[qkudidWN][increase_size!]] *[p]* [[QHtdBhj7][parent]], [[FB8GCKlU][parent_type]] *[s]* [[3dyeLCZs][size]] *[∂]* [[EfT0uGKQ][∂_j]] 
+  - @@latex:\phantomsection@@ *=AArray=*  <<Cf4xzzph>> <<All_AArray>>
+  #+BEGIN_SRC julia :eval never :exports code
+  struct AArray{AT<:AFloat,N,P<:AbstractArray,AIDX}  <: AbstractArray{AT,N}
+  #+END_SRC
+  #+BEGIN_QUOTE
+  This is the array type to use in place of built-in Julia =Array{T,N}= types.
 
-<<7ueQyOFx>> *Index:* *[A]* [[pP28cj85][AArray]], [[Uca1PsYO][AFloat]] *[T]* [[cZ7Y1jUc][Tape]] *[a]* [[JIj2PKAw][afloat_next_index]], [[NqfYw8Vf][aidx]], [[jVifLBio][aidx_type]] *[c]* [[E061j8ng][create_tape_chunk]] *[i]* [[ndRrFeex][increase_size!]] *[p]* [[1nhbvuh6][parent]], [[CnzCNuuO][parent_type]] *[∂]* [[lvwJJix1][∂_j]] 
-- @@latex:\phantomsection@@ *=AArray=*  <<pP28cj85>> <<All_AArray>>
-#+BEGIN_SRC julia :eval never :exports code
-struct AArray{AT<:AFloat,N,P<:AbstractArray,AIDX}  <: AbstractArray{AT,N}
-#+END_SRC
-#+BEGIN_QUOTE
-This is the array type to use in place of built-in Julia =Array{T,N}= types.
+  *Parameters*:
 
-*Parameters*:
+  - =AIDX= is an extra parameter defining how [[All_AFloat][struct AFloat]] indices are
+    stored. This type can be different from =P=. For instance in case
+    of sparse matrix, only an uni-dimensional array to store indices
+    associated to non-zero components is required, no need to the
+    store sparsity pattern twice. 
 
-- =AIDX= is an extra parameter defining how [[All_AFloat][struct AFloat]] indices are
-  stored. This type can be different from =P=. For instance in case
-  of sparse matrix, only an uni-dimensional array to store indices
-  associated to non-zero components is required, no need to the
-  store sparsity pattern twice. 
+  *Design*:
+  - [[id:c39435d9-532c-4390-8089-bde4c5e53f3e][Multiple parameters in the struct definition]]
 
-*Design*:
-- [[id:c39435d9-532c-4390-8089-bde4c5e53f3e][Multiple parameters in the struct definition]]
+  #+END_QUOTE
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::6][array.jl:6]], [[2ZKqv4Ic][back to index]]
 
-#+END_QUOTE
-[[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::3][array.jl:3]], [[7ueQyOFx][back to index]]
+  #+BEGIN_SRC julia :eval never :exports code
+  function AArray(p::Array{T,N}) where {T<:AbstractFloat,N}
+  #+END_SRC
+  #+BEGIN_QUOTE
+  Construction from an "usual" Julia array of real numbers.
 
-#+BEGIN_SRC julia :eval never :exports code
-function AArray(p::Array{T,N}) where {T<:AbstractFloat,N}
-#+END_SRC
-#+BEGIN_QUOTE
-Construction from an "usual" Julia array of real numbers.
+  Usage example:
 
-Usage example:
+  #+BEGIN_SRC julia
+  AArray(rand(2,1))
+  #+END_SRC
+  #+BEGIN_SRC julia
+  2×1 PragmaticAD.AArray{PragmaticAD.AFloat{Float64},2,Array{Float64,2},Array{Int64,2}}:
+   PragmaticAD.AFloat{Float64}(0.130903, 23)
+   PragmaticAD.AFloat{Float64}(0.428577, 24)
+  #+END_SRC
 
-#+BEGIN_SRC julia
-AArray(rand(2,1))
-#+END_SRC
+  *Design*:
+  - [[id:b384f347-8c27-42ae-9759-2914d67cad4d][Restricted set of constructors]]
+  #+END_QUOTE
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::25][array.jl:25]], [[2ZKqv4Ic][back to index]]
+  - @@latex:\phantomsection@@ *=AFloat=*  <<AuWonEhQ>> <<All_AFloat>>
+  #+BEGIN_SRC julia :eval never :exports code
+  struct AFloat{T<:AbstractFloat} <: Real
+  #+END_SRC
+  #+BEGIN_QUOTE
+  Specialization of number alllowing to track and record operations in the [[All_Tape][struct Tape]]
+  #+END_QUOTE
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::35][tape.jl:35]], [[2ZKqv4Ic][back to index]]
+  - @@latex:\phantomsection@@ *=IndexStyle=*  <<qCCVhSyu>>
+  #+BEGIN_SRC julia :eval never :exports code
+  IndexStyle(::Type{<:AArray{AT,N,P,AIDX}}) where {AT,N,P,AIDX}
+  #+END_SRC
+  #+BEGIN_QUOTE
+  *Design*:
+  - [[id:1b16ffef-47fa-473c-b033-de4a864dcaf3][Interface, main methods to redefine]]
+  #+END_QUOTE
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::119][array.jl:119]], [[2ZKqv4Ic][back to index]]
+  - @@latex:\phantomsection@@ *=Tape=*  <<wGS8Ebmm>> <<All_Tape>>
+  #+BEGIN_SRC julia :eval never :exports code
+  mutable struct Tape{T<:AbstractFloat}
+  #+END_SRC
+  #+BEGIN_QUOTE
+  Used to store $d\Phi^{(m)}$ using a storage scheme close to the
+  Compressed Row Storage (CRS)
 
-#+RESULTS:
-| PragmaticAD.AFloat{Float64}(0.2928670358947787 | 19) |
-| PragmaticAD.AFloat{Float64}(0.4737797653187008 | 20) |
+  *Note:* we use =mutable= to have a "by reference" semantic to avoid
+   having a tape copy (which would be catastrophic).
+  #+END_QUOTE
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::8][tape.jl:8]], [[2ZKqv4Ic][back to index]]
 
-#+BEGIN_SRC julia
-2×1 PragmaticAD.AArray{PragmaticAD.AFloat{Float64},2,Array{Float64,2},Array{Int64,2}}:
- PragmaticAD.AFloat{Float64}(0.568854, 17)
- PragmaticAD.AFloat{Float64}(0.948156, 18)
-#+END_SRC
+  #+BEGIN_SRC julia :eval never :exports code
+  function Tape{T<:AbstractFloat}(::Type{T},tape_initial_size::Int = 100)
+  #+END_SRC
+  #+BEGIN_QUOTE
+  Tape constructor
+  #+BEGIN_SRC julia
+  PragmaticAD.Tape(Float64)
+  #+END_SRC
+  #+BEGIN_SRC julia
+  PragmaticAD.Tape{Float64}([1], PragmaticAD.∂_j{Float64}[])
+  #+END_SRC
+  #+END_QUOTE
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::21][tape.jl:21]], [[2ZKqv4Ic][back to index]]
+  - @@latex:\phantomsection@@ *=afloat_next_index=*  <<Zw3esf8U>>
+  #+BEGIN_SRC julia :eval never :exports code
+  afloat_next_index{T}(tape::Tape{T})::Int
+  #+END_SRC
+  #+BEGIN_QUOTE
 
-#+RESULTS:
-| PragmaticAD.AFloat{Float64}(0.948156 | 18) |
+  #+END_QUOTE
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::51][tape.jl:51]], [[2ZKqv4Ic][back to index]]
+  - @@latex:\phantomsection@@ *=aidx=*  <<36Id32AX>>
+  #+BEGIN_SRC julia :eval never :exports code
+  aidx(aa::AArray)
+  #+END_SRC
+  #+BEGIN_QUOTE
+  The recommended way to access aidx member
 
-*Design*:
-- [[id:b384f347-8c27-42ae-9759-2914d67cad4d][Restricted set of constructors]]
-#+END_QUOTE
-[[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::22][array.jl:22]], [[7ueQyOFx][back to index]]
-- @@latex:\phantomsection@@ *=AFloat=*  <<Uca1PsYO>> <<All_AFloat>>
-#+BEGIN_SRC julia :eval never :exports code
-struct AFloat{T<:AbstractFloat} <: Real
-#+END_SRC
-#+BEGIN_QUOTE
-Specialization of number alllowing to track and record operations in the [[All_Tape][struct Tape]]
-#+END_QUOTE
-[[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::35][tape.jl:35]], [[7ueQyOFx][back to index]]
-- @@latex:\phantomsection@@ *=Tape=*  <<cZ7Y1jUc>> <<All_Tape>>
-#+BEGIN_SRC julia :eval never :exports code
-mutable struct Tape{T<:AbstractFloat}
-#+END_SRC
-#+BEGIN_QUOTE
-Used to store $d\Phi^{(m)}$ using a storage scheme close to the
-Compressed Row Storage (CRS)
+  See [[id:c39435d9-532c-4390-8089-bde4c5e53f3e][Multiple parameters in the struct definition]]
+  #+END_QUOTE
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::85][array.jl:85]], [[2ZKqv4Ic][back to index]]
+  - @@latex:\phantomsection@@ *=aidx_type=*  <<LwCy8wq9>>
+  #+BEGIN_SRC julia :eval never :exports code
+  aidx_type(::Type{AArray{AT,N,P,AIDX}}) where {AT,N,P,AIDX}
+  #+END_SRC
+  #+BEGIN_QUOTE
+  The recommended way to access aidx member *type*
 
-*Note:* we use =mutable= to have a "by reference" semantic to avoid
- having a tape copy (which would be catastrophic).
-#+END_QUOTE
-[[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::8][tape.jl:8]], [[7ueQyOFx][back to index]]
+  See [[id:c39435d9-532c-4390-8089-bde4c5e53f3e][Multiple parameters in the struct definition]]
+  #+END_QUOTE
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::77][array.jl:77]], [[2ZKqv4Ic][back to index]]
+  - @@latex:\phantomsection@@ *=create_tape_chunk=*  <<l85N21ue>>
+  #+BEGIN_SRC julia :eval never :exports code
+  function create_tape_chunk(tape::Tape{T},chunk_n::Int) where {T}
+  #+END_SRC
+  #+BEGIN_QUOTE
+  This function allocate a chunk of =chunk_n= new [[All_AFloat][struct AFloat]].
+  It returns the index of the first one.
+  #+END_QUOTE
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::57][array.jl:57]], [[2ZKqv4Ic][back to index]]
+  - @@latex:\phantomsection@@ *=getindex=*  <<QnLtuYua>>
+  #+BEGIN_SRC julia :eval never :exports code
+  getindex(aa::AArray{AT}, i::Int) where {AT}
+  #+END_SRC
+  #+BEGIN_QUOTE
+  *Design*:
+  - [[id:1b16ffef-47fa-473c-b033-de4a864dcaf3][Interface, main methods to redefine]]
+  #+END_QUOTE
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::126][array.jl:126]], [[2ZKqv4Ic][back to index]]
+  - @@latex:\phantomsection@@ *=increase_size!=*  <<qkudidWN>>
+  #+BEGIN_SRC julia :eval never :exports code
+  function increase_size!(v::Array{T,1},positive_integer::Int)::Int where {T}
+  #+END_SRC
+  #+BEGIN_QUOTE
+  This function increase array size by =positive_integer= and returns
+  the initial size
+  #+END_QUOTE
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::46][array.jl:46]], [[2ZKqv4Ic][back to index]]
+  - @@latex:\phantomsection@@ *=parent=*  <<QHtdBhj7>>
+  #+BEGIN_SRC julia :eval never :exports code
+  parent(aa::AArray)
+  #+END_SRC
+  #+BEGIN_QUOTE
+  The recommended way to access parent membe
 
-#+BEGIN_SRC julia :eval never :exports code
-function Tape{T<:AbstractFloat}(::Type{T},tape_initial_size::Int = 100)
-#+END_SRC
-#+BEGIN_QUOTE
-Tape constructor
-#+BEGIN_SRC julia
-PragmaticAD.Tape(Float64)
-#+END_SRC
+  See [[id:c39435d9-532c-4390-8089-bde4c5e53f3e][Multiple parameters in the struct definition]]
+  #+END_QUOTE
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::101][array.jl:101]], [[2ZKqv4Ic][back to index]]
+  - @@latex:\phantomsection@@ *=parent_type=*  <<FB8GCKlU>>
+  #+BEGIN_SRC julia :eval never :exports code
+  parent_type(::Type{AArray{AT,N,P,AIDX}}) where {AT,N,P,AIDX}
+  #+END_SRC
+  #+BEGIN_QUOTE
+  The recommended way to access parent member *type*
 
-#+RESULTS:
-
-#+BEGIN_SRC julia
-PragmaticAD.Tape{Float64}([1], PragmaticAD.∂_j{Float64}[])
-#+END_SRC
-
-#+RESULTS:
-
-#+END_QUOTE
-[[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::21][tape.jl:21]], [[7ueQyOFx][back to index]]
-- @@latex:\phantomsection@@ *=afloat_next_index=*  <<JIj2PKAw>>
-#+BEGIN_SRC julia :eval never :exports code
-afloat_next_index{T}(tape::Tape{T})::Int
-#+END_SRC
-#+BEGIN_QUOTE
-
-#+END_QUOTE
-[[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::51][tape.jl:51]], [[7ueQyOFx][back to index]]
-- @@latex:\phantomsection@@ *=aidx=*  <<NqfYw8Vf>>
-#+BEGIN_SRC julia :eval never :exports code
-aidx(aa::AArray)
-#+END_SRC
-#+BEGIN_QUOTE
-The recommended way to access aidx member
-
-See [[id:c39435d9-532c-4390-8089-bde4c5e53f3e][Multiple parameters in the struct definition]]
-#+END_QUOTE
-[[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::82][array.jl:82]], [[7ueQyOFx][back to index]]
-- @@latex:\phantomsection@@ *=aidx_type=*  <<jVifLBio>>
-#+BEGIN_SRC julia :eval never :exports code
-aidx_type(::Type{AArray{AT,N,P,AIDX}}) where {AT,N,P,AIDX}
-#+END_SRC
-#+BEGIN_QUOTE
-The recommended way to access aidx member *type*
-
-See [[id:c39435d9-532c-4390-8089-bde4c5e53f3e][Multiple parameters in the struct definition]]
-#+END_QUOTE
-[[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::74][array.jl:74]], [[7ueQyOFx][back to index]]
-- @@latex:\phantomsection@@ *=create_tape_chunk=*  <<E061j8ng>>
-#+BEGIN_SRC julia :eval never :exports code
-function create_tape_chunk(tape::Tape{T},chunk_n::Int) where {T}
-#+END_SRC
-#+BEGIN_QUOTE
-This function allocate a chunk of =chunk_n= new [[All_AFloat][struct AFloat]].
-It returns the index of the first one.
-#+END_QUOTE
-[[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::54][array.jl:54]], [[7ueQyOFx][back to index]]
-- @@latex:\phantomsection@@ *=increase_size!=*  <<ndRrFeex>>
-#+BEGIN_SRC julia :eval never :exports code
-function increase_size!(v::Array{T,1},positive_integer::Int)::Int where {T}
-#+END_SRC
-#+BEGIN_QUOTE
-This function increase array size by =positive_integer= and returns
-the initial size
-#+END_QUOTE
-[[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::43][array.jl:43]], [[7ueQyOFx][back to index]]
-- @@latex:\phantomsection@@ *=parent=*  <<1nhbvuh6>>
-#+BEGIN_SRC julia :eval never :exports code
-parent(aa::AArray)
-#+END_SRC
-#+BEGIN_QUOTE
-The recommended way to access parent membe
-
-See [[id:c39435d9-532c-4390-8089-bde4c5e53f3e][Multiple parameters in the struct definition]]
-#+END_QUOTE
-[[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::98][array.jl:98]], [[7ueQyOFx][back to index]]
-- @@latex:\phantomsection@@ *=parent_type=*  <<CnzCNuuO>>
-#+BEGIN_SRC julia :eval never :exports code
-parent_type(::Type{AArray{AT,N,P,AIDX}}) where {AT,N,P,AIDX}
-#+END_SRC
-#+BEGIN_QUOTE
-The recommended way to access parent member *type*
-
-See [[id:c39435d9-532c-4390-8089-bde4c5e53f3e][Multiple parameters in the struct definition]]
-#+END_QUOTE
-[[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::90][array.jl:90]], [[7ueQyOFx][back to index]]
-- @@latex:\phantomsection@@ *=∂_j=*  <<lvwJJix1>>
-#+BEGIN_SRC julia :eval never :exports code
-struct ∂_j{T<:Real}
-#+END_SRC
-#+BEGIN_QUOTE
-Used to store partial derivatives $\partial_j$
-#+END_QUOTE
-[[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::1][tape.jl:1]], [[7ueQyOFx][back to index]]
-:END:
+  See [[id:c39435d9-532c-4390-8089-bde4c5e53f3e][Multiple parameters in the struct definition]]
+  #+END_QUOTE
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::93][array.jl:93]], [[2ZKqv4Ic][back to index]]
+  - @@latex:\phantomsection@@ *=size=*  <<3dyeLCZs>>
+  #+BEGIN_SRC julia :eval never :exports code
+  size(aa::AArray)
+  #+END_SRC
+  #+BEGIN_QUOTE
+  *Design*:
+  - [[id:1b16ffef-47fa-473c-b033-de4a864dcaf3][Interface, main methods to redefine]]
+  #+END_QUOTE
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::112][array.jl:112]], [[2ZKqv4Ic][back to index]]
+  - @@latex:\phantomsection@@ *=∂_j=*  <<EfT0uGKQ>>
+  #+BEGIN_SRC julia :eval never :exports code
+  struct ∂_j{T<:Real}
+  #+END_SRC
+  #+BEGIN_QUOTE
+  Used to store partial derivatives $\partial_j$
+  #+END_QUOTE
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::1][tape.jl:1]], [[2ZKqv4Ic][back to index]]
+  :END:
 
 * Design remarks 
 ** Array struct design
+
+   The global design has been inspired from these Julia packages:
+   - [[https://github.com/JuliaArrays/OffsetArrays.jl/blob/master/src/OffsetArrays.jl][OffsetArrays.jl]]
+   - [[https://github.com/JuliaArrays/StaticArrays.jl][StaticArrays.jl]]
+
 *** Multiple parameters in the struct definition 
-   :PROPERTIES:
-   :ID:       c39435d9-532c-4390-8089-bde4c5e53f3e
-   :END:
-The [[All_AArray][AArray]] class can possibly have a quite large number of parameters
-(here =T,N,AIDX,O=). In order to decouple this parametrization from
-the future method implementations we use the following guideline.
+    :PROPERTIES:
+    :ID:       c39435d9-532c-4390-8089-bde4c5e53f3e
+    :END:
+    The [[All_AArray][AArray]] class can possibly have a quite large number of parameters
+    (here =T,N,AIDX,O=). In order to decouple this parametrization from
+    the future method implementations we use the following guideline.
 
-Define =foo= as follows:
-#+BEGIN_SRC julia :eval never 
+    Define =foo= as follows:
+    #+BEGIN_SRC julia :eval never 
 foo(aa:AArray) = ...
-#+END_SRC
-and not as follows:
-#+BEGIN_SRC julia :eval never 
+    #+END_SRC
+    and not as follows:
+    #+BEGIN_SRC julia :eval never 
 foo(aa::AArray{T,N,P,AIDX}) where {T,N,P,AIDX} = ...
-#+END_SRC
-In this former code we see that any change in the parameter lists will break =foo= function code.
+    #+END_SRC
+    In this former code we see that any change in the parameter lists will break =foo= function code.
 
-As a consequence, one must define a *restricted number* of helper
-functions like
-#+BEGIN_SRC julia :eval never 
+    As a consequence, one must define a *restricted number* of helper
+    functions like
+    #+BEGIN_SRC julia :eval never 
 aidx_type(::Type{AArray{T,N,P,AIDX}}) where {T,N,P,AIDX} = AIDX
 ... same for T,N,P and that is all!
-#+END_SRC
+    #+END_SRC
 
 *** Restricted set of constructors
     :PROPERTIES:
     :ID:       b384f347-8c27-42ae-9759-2914d67cad4d
     :END:
 
-There are a lot of Array types in Julia 
-#+BEGIN_EXAMPLE
+    There are a lot of Array types in Julia 
+    #+BEGIN_EXAMPLE
 julia> subtypes(AbstractArray)
 24-element Array{Union{DataType, UnionAll},1}:
  AbstractSparseArray                      
@@ -315,21 +342,21 @@ julia> subtypes(AbstractArray)
  Core.Inference.Range                     
  DenseArray                               
  ...
-#+END_EXAMPLE
-with some variations that can leak to unexpected bugs if we blindly use a generic approach.
-In order to control type variability we use an inner constructor. From Julia doc:
-#+BEGIN_QUOTE
-Without any explicitly provided inner constructors, the declaration of
-the composite type Point{T<:Real} automatically provides an inner
-constructor, Point{T}, for each possible type T<:Real, that behaves
-just like non-parametric default inner constructors do. It also
-provides a single general outer Point constructor that takes pairs of
-real arguments, which must be of the same type.
-#+END_QUOTE
+    #+END_EXAMPLE
+    with some variations that can lead to unexpected bugs if we blindly use a generic approach.
+    In order to control type variability we use an inner constructor. From Julia doc:
+    #+BEGIN_QUOTE
+    Without any explicitly provided inner constructors, the declaration of
+    the composite type Point{T<:Real} automatically provides an inner
+    constructor, Point{T}, for each possible type T<:Real, that behaves
+    just like non-parametric default inner constructors do. It also
+    provides a single general outer Point constructor that takes pairs of
+    real arguments, which must be of the same type.
+    #+END_QUOTE
 
-This mechanism allows use to explicitly control available implementations:
+    This mechanism allows use to explicitly control available implementations:
 
-#+BEGIN_SRC julia :eval never
+    #+BEGIN_SRC julia :eval never
 julia> struct X{T}
            x::T
 
@@ -345,17 +372,55 @@ This may have arisen from a call to the constructor X(...),
 since type constructors fall back to convert methods.
 Stacktrace:
  [1] X(::Float64) at ./sysimg.jl:77
-#+END_SRC
+    #+END_SRC
 
 *** Interface, main methods to redefine
+    :PROPERTIES:
+    :ID:       1b16ffef-47fa-473c-b033-de4a864dcaf3
+    :END:
 
+
+    Methods to implement can be found [[https://docs.julialang.org/en/stable/manual/interfaces/#man-interface-array-1][here]] (official julia doc)
+
+    The idea is to reuse as much a possible =parent='s methods.
+
+**** Remark
+     :PROPERTIES:
+     :ID:       ffb7408e-cb7b-4c7e-a1f8-39c3af3d37d5
+     :END:
+
+     CAVEAT: my first attempt was to write =getindex(parent(aa),I)= as follows:
+
+     #+BEGIN_SRC julia :eval never
+  @inline Base.getindex(aa::AArray{AT,N,P}, I::Vararg{Int, N}) where {AT,N,P} = AT(getindex(parent(aa),I...),getindex(aidx(aa),I...))
+     #+END_SRC
+     which gives this:
+     #+BEGIN_EXAMPLE
+ERROR: ArgumentError: invalid index: (1, 1)
+Stacktrace:
+[1] getindex(::Array{Float64,2}, ::Tuple{Int64,Int64}) at ./abstractarray.jl:883
+     #+END_EXAMPLE
+  
+     The correct form is:
+     #+BEGIN_SRC julia :eval never
+  @inline Base.getindex(aa::AArray{AT,N,P}, I::Vararg{Int, N}) where {AT,N,P} = AT(getindex(parent(aa),I...),getindex(aidx(aa),I...))
+     #+END_SRC
+
+**** TODO [0/1]
+
+- [ ] implement:
+#+BEGIN_EXAMPLE
+function Base.similar(aa::AArray{T,N,P}, ::Type{TS}, dims::Dims) where {T,TS,N,P}
+    return similar(parent(A), T, dims)
+end
+#+END_EXAMPLE
 
 * Unit tests
 
-#+BEGIN_SRC julia :results output table :exports results
+  #+BEGIN_SRC julia :results output table :exports results
 include("/home/picaud/GitHub/PragmaticAD.jl/test/runtests.jl")
-#+END_SRC
+  #+END_SRC
 
-#+RESULTS:
-: Test Summary: | Pass  Total
-: PragmaticAD   |    2      2
+  #+RESULTS:
+  : Test Summary: | Pass  Total
+  : PragmaticAD   |    2      2
