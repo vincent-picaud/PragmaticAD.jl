@@ -24,3 +24,33 @@ initialize_boxing_module(usedModules=["PragmaticAD"])
 #+RESULTS:
 
 * Introduction
+
+* API documentation 
+* Internal documentation
+
+#+BEGIN_SRC julia :results output drawer :eval no-export :exports results
+documented_items=create_documented_item_array_dir("~/GitHub/PragmaticAD.jl/src/");
+print_org_doc(documented_items,tag="Tape",header_level=0)
+#+END_SRC
+
+#+RESULTS:
+:RESULTS:
+
+<<RkepNBoT>> *Index:* *[T]* [[BRXtFhXk][Tape]] *[∂]* [[cJJ6ett3][∂_j]] 
+- @@latex:\phantomsection@@ *=Tape=*  <<BRXtFhXk>>
+#+BEGIN_SRC julia :eval never :exports code
+struct Tape{T<:AbstractFloat}
+#+END_SRC
+[[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::6][tape.jl:6]], [[RkepNBoT][back to index]]
+
+#+BEGIN_SRC julia :eval never :exports code
+function Tape{T<:AbstractFloat}(::Type{T},tape_initial_size::Int = 100)
+#+END_SRC
+[[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::11][tape.jl:11]], [[RkepNBoT][back to index]]
+- @@latex:\phantomsection@@ *=∂_j=*  <<cJJ6ett3>>
+#+BEGIN_SRC julia :eval never :exports code
+struct ∂_j{T<:Real}
+#+END_SRC
+[[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::1][tape.jl:1]], [[RkepNBoT][back to index]]
+:END:
+

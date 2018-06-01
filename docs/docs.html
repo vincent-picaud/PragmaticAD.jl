@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2018-06-01 Fri 11:16 -->
+<!-- 2018-06-01 Fri 11:29 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Pragmatic automatic differentiation</title>
@@ -309,18 +309,64 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org78528a7">1. Introduction</a></li>
+<li><a href="#org5b2b738">1. Introduction</a></li>
+<li><a href="#org0a29df1">2. API documentation</a></li>
+<li><a href="#orgf50f0d1">3. Internal documentation</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org78528a7" class="outline-2">
-<h2 id="org78528a7"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-org5b2b738" class="outline-2">
+<h2 id="org5b2b738"><span class="section-number-2">1</span> Introduction</h2>
+</div>
+
+<div id="outline-container-org0a29df1" class="outline-2">
+<h2 id="org0a29df1"><span class="section-number-2">2</span> API documentation</h2>
+</div>
+<div id="outline-container-orgf50f0d1" class="outline-2">
+<h2 id="orgf50f0d1"><span class="section-number-2">3</span> Internal documentation</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+
+</p>
+
+<p>
+<a id="org777c3a6"></a> <b>Index:</b> <b>[T]</b> <a href="#org9e32697">Tape</a> <b>[∂]</b> <a href="#org95a6aa9">∂_j</a> 
+</p>
+<ul class="org-ul">
+<li><b><code>Tape</code></b>  <a id="org9e32697"></a></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-julia"><span style="color: #a020f0;">struct</span> <span style="color: #228b22;">Tape</span>{T&lt;:<span style="color: #228b22;">AbstractFloat</span>}
+</pre>
+</div>
+<p>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#org30cc093">tape.jl:6</a>, <a href="#org777c3a6">back to index</a>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-julia"><span style="color: #a020f0;">function</span> <span style="color: #0000ff;">Tape</span>{T&lt;:<span style="color: #228b22;">AbstractFloat</span>}(::<span style="color: #228b22;">Type</span>{T},tape_initial_size::<span style="color: #228b22;">Int</span> = 100)
+</pre>
+</div>
+<p>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#orgb13acc8">tape.jl:11</a>, <a href="#org777c3a6">back to index</a>
+</p>
+<ul class="org-ul">
+<li><b><code>∂_j</code></b>  <a id="org95a6aa9"></a></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-julia"><span style="color: #a020f0;">struct</span> &#8706;_j{T&lt;:<span style="color: #228b22;">Real</span>}
+</pre>
+</div>
+<p>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#orgebf1404">tape.jl:1</a>, <a href="#org777c3a6">back to index</a>
+</p>
+</div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: picaud</p>
-<p class="date">Created: 2018-06-01 Fri 11:16</p>
+<p class="date">Created: 2018-06-01 Fri 11:29</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

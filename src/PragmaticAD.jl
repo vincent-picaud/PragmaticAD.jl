@@ -2,6 +2,6 @@ module PragmaticAD
 
 # using StaticArrays
 
-#include("utils.jl")
+include("tape.jl")
 
 end # module
