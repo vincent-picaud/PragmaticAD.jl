@@ -105,18 +105,12 @@ print_org_doc(documented_items,link_prefix="All_", header_level=0)
 
   #+RESULTS:
   :RESULTS:
-  WARNING: Method definition size(PragmaticAD.AArray{AT, N, P, AIDX} where AIDX where P<:(AbstractArray{T, N} where N where T) where N where AT<:(PragmaticAD.AFloat{T} where T<:AbstractFloat)) in module PragmaticAD at /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:64 overwritten at /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:117.
-  WARNING: Method definition (::Type{Base.IndexStyle})(Type{#s48} where #s48<:PragmaticAD.AArray{AT, N, P, AIDX}) in module PragmaticAD at /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:65 overwritten at /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:124.
-  WARNING: Method definition getindex(PragmaticAD.AArray{AT, N, P, AIDX} where AIDX where P<:(AbstractArray{T, N} where N where T) where N, Int64) in module PragmaticAD at /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:66 overwritten at /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:131.
-  WARNING: Method definition getindex(PragmaticAD.AArray{AT, N, P, AIDX} where AIDX, Int64...) in module PragmaticAD at /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:71 overwritten at /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:140.
-  WARNING: Method definition setindex!(PragmaticAD.AArray{AT, N, P, AIDX} where AIDX where P<:(AbstractArray{T, N} where N where T), AT, Int64...) in module PragmaticAD at /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:74 overwritten at /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:148.
-  WARNING: Method definition setindex!(PragmaticAD.AArray{AT, N, P, AIDX} where AIDX where P<:(AbstractArray{T, N} where N where T), Any, Int64...) in module PragmaticAD at /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:82 overwritten at /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:161.
   # =WARNING:= cannot interpret /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:3 AssertionError("code != nothing")
   # =WARNING:= cannot interpret /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:134 AssertionError("code != nothing")
   # =WARNING:= cannot interpret /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:142 AssertionError("code != nothing")
   # =WARNING:= cannot interpret /home/picaud/GitHub/PragmaticAD.jl/src/array.jl:155 AssertionError("code != nothing")
-  <<2ZKqv4Ic>> *Index:* *[A]* [[Cf4xzzph][AArray]], [[AuWonEhQ][AFloat]] *[I]* [[qCCVhSyu][IndexStyle]] *[T]* [[wGS8Ebmm][Tape]] *[a]* [[Zw3esf8U][afloat_next_index]], [[36Id32AX][aidx]], [[LwCy8wq9][aidx_type]] *[c]* [[l85N21ue][create_tape_chunk]] *[g]* [[QnLtuYua][getindex]] *[i]* [[qkudidWN][increase_size!]] *[p]* [[QHtdBhj7][parent]], [[FB8GCKlU][parent_type]] *[s]* [[3dyeLCZs][size]] *[∂]* [[EfT0uGKQ][∂_j]] 
-  - @@latex:\phantomsection@@ *=AArray=*  <<Cf4xzzph>> <<All_AArray>>
+  <<ho6tOInJ>> *Index:* *[A]* [[6sPuEoD6][AArray]], [[LWjP364F][AFloat]] *[B]* [[uRLdGxPI][Base.push!]] *[I]* [[pHKWAxXk][IndexStyle]] *[T]* [[UijFbbpt][Tape]] *[a]* [[bYK5zHcp][afloat_count]], [[ZGySLI8E][afloat_next_index]], [[jYfzTV6i][aidx]], [[HApKzwQK][aidx_type]] *[c]* [[pPkkY2Lh][create_tape_chunk]], [[0i67yetI][create_tape_record]] *[e]* [[neJnUUrp][export]] *[f]* [[Ux5kI0hb][f_gradient]] *[g]* [[YBk7G9Dj][getindex]] *[i]* [[8Ax9xbOe][increase_size!]] *[p]* [[dWL6E4sL][parent]], [[uk0HhRrc][parent_type]] *[r]* [[yP0ZNYK5][rewind_tape!]] *[s]* [[1ITvI4op][size]] *[t]* [[1kHs2oUO][tape_position]] *[∂]* [[OjgTcZh2][∂_j]] 
+  - @@latex:\phantomsection@@ *=AArray=*  <<6sPuEoD6>> <<All_AArray>>
   #+BEGIN_SRC julia :eval never :exports code
   struct AArray{AT<:AFloat,N,P<:AbstractArray,AIDX}  <: AbstractArray{AT,N}
   #+END_SRC
@@ -135,7 +129,7 @@ print_org_doc(documented_items,link_prefix="All_", header_level=0)
   - [[id:c39435d9-532c-4390-8089-bde4c5e53f3e][Multiple parameters in the struct definition]]
 
   #+END_QUOTE
-  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::6][array.jl:6]], [[2ZKqv4Ic][back to index]]
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::6][array.jl:6]], [[ho6tOInJ][back to index]]
 
   #+BEGIN_SRC julia :eval never :exports code
   function AArray(p::Array{T,N}) where {T<:AbstractFloat,N}
@@ -150,23 +144,39 @@ print_org_doc(documented_items,link_prefix="All_", header_level=0)
   #+END_SRC
   #+BEGIN_SRC julia
   2×1 PragmaticAD.AArray{PragmaticAD.AFloat{Float64},2,Array{Float64,2},Array{Int64,2}}:
-   PragmaticAD.AFloat{Float64}(0.130903, 23)
-   PragmaticAD.AFloat{Float64}(0.428577, 24)
+   PragmaticAD.AFloat{Float64}(0.719349, 27) 
+   PragmaticAD.AFloat{Float64}(0.0908467, 28)
   #+END_SRC
 
   *Design*:
   - [[id:b384f347-8c27-42ae-9759-2914d67cad4d][Restricted set of constructors]]
   #+END_QUOTE
-  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::25][array.jl:25]], [[2ZKqv4Ic][back to index]]
-  - @@latex:\phantomsection@@ *=AFloat=*  <<AuWonEhQ>> <<All_AFloat>>
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::25][array.jl:25]], [[ho6tOInJ][back to index]]
+  - @@latex:\phantomsection@@ *=AFloat=*  <<LWjP364F>> <<All_AFloat>>
   #+BEGIN_SRC julia :eval never :exports code
   struct AFloat{T<:AbstractFloat} <: Real
   #+END_SRC
   #+BEGIN_QUOTE
   Specialization of number alllowing to track and record operations in the [[All_Tape][struct Tape]]
   #+END_QUOTE
-  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::35][tape.jl:35]], [[2ZKqv4Ic][back to index]]
-  - @@latex:\phantomsection@@ *=IndexStyle=*  <<qCCVhSyu>>
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::41][tape.jl:41]], [[ho6tOInJ][back to index]]
+
+  #+BEGIN_SRC julia :eval never :exports code
+  AFloat{T}(value::S) where {T<:AbstractFloat,S<:Real}
+  #+END_SRC
+  #+BEGIN_QUOTE
+  Creates a new [[All_AFloat][struct AFloat]] from its value.
+  #+END_QUOTE
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::50][tape.jl:50]], [[ho6tOInJ][back to index]]
+  - @@latex:\phantomsection@@ *=Base.push!=*  <<uRLdGxPI>>
+  #+BEGIN_SRC julia :eval never :exports code
+  function Base.push!{T,N}(v::Array{T,1},x::NTuple{N,T})::Array{T,1}
+  #+END_SRC
+  #+BEGIN_QUOTE
+  A helper function that push a NTuple into an array
+  #+END_QUOTE
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::80][tape.jl:80]], [[ho6tOInJ][back to index]]
+  - @@latex:\phantomsection@@ *=IndexStyle=*  <<pHKWAxXk>>
   #+BEGIN_SRC julia :eval never :exports code
   IndexStyle(::Type{<:AArray{AT,N,P,AIDX}}) where {AT,N,P,AIDX}
   #+END_SRC
@@ -174,8 +184,8 @@ print_org_doc(documented_items,link_prefix="All_", header_level=0)
   *Design*:
   - [[id:1b16ffef-47fa-473c-b033-de4a864dcaf3][Interface, main methods to redefine]]
   #+END_QUOTE
-  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::119][array.jl:119]], [[2ZKqv4Ic][back to index]]
-  - @@latex:\phantomsection@@ *=Tape=*  <<wGS8Ebmm>> <<All_Tape>>
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::119][array.jl:119]], [[ho6tOInJ][back to index]]
+  - @@latex:\phantomsection@@ *=Tape=*  <<UijFbbpt>> <<All_Tape>>
   #+BEGIN_SRC julia :eval never :exports code
   mutable struct Tape{T<:AbstractFloat}
   #+END_SRC
@@ -186,7 +196,7 @@ print_org_doc(documented_items,link_prefix="All_", header_level=0)
   *Note:* we use =mutable= to have a "by reference" semantic to avoid
    having a tape copy (which would be catastrophic).
   #+END_QUOTE
-  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::8][tape.jl:8]], [[2ZKqv4Ic][back to index]]
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::14][tape.jl:14]], [[ho6tOInJ][back to index]]
 
   #+BEGIN_SRC julia :eval never :exports code
   function Tape{T<:AbstractFloat}(::Type{T},tape_initial_size::Int = 100)
@@ -200,16 +210,25 @@ print_org_doc(documented_items,link_prefix="All_", header_level=0)
   PragmaticAD.Tape{Float64}([1], PragmaticAD.∂_j{Float64}[])
   #+END_SRC
   #+END_QUOTE
-  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::21][tape.jl:21]], [[2ZKqv4Ic][back to index]]
-  - @@latex:\phantomsection@@ *=afloat_next_index=*  <<Zw3esf8U>>
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::27][tape.jl:27]], [[ho6tOInJ][back to index]]
+  - @@latex:\phantomsection@@ *=afloat_count=*  <<bYK5zHcp>>
+  #+BEGIN_SRC julia :eval never :exports code
+  afloat_count{T}(tape::Tape{T})::Int
+  #+END_SRC
+  #+BEGIN_QUOTE
+  Returns how many [[All_AFloat][struct AFloat]] are stored in the current [[All_Tape][struct Tape]]
+  #+END_QUOTE
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::74][tape.jl:74]], [[ho6tOInJ][back to index]]
+  - @@latex:\phantomsection@@ *=afloat_next_index=*  <<ZGySLI8E>>
   #+BEGIN_SRC julia :eval never :exports code
   afloat_next_index{T}(tape::Tape{T})::Int
   #+END_SRC
   #+BEGIN_QUOTE
-
+  Returns a new [[All_AFloat][struct AFloat]] index. Generally used at creation time,
+  see [[All_create_tape_record_value][create_tape_record(...)]]
   #+END_QUOTE
-  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::51][tape.jl:51]], [[2ZKqv4Ic][back to index]]
-  - @@latex:\phantomsection@@ *=aidx=*  <<36Id32AX>>
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::67][tape.jl:67]], [[ho6tOInJ][back to index]]
+  - @@latex:\phantomsection@@ *=aidx=*  <<jYfzTV6i>>
   #+BEGIN_SRC julia :eval never :exports code
   aidx(aa::AArray)
   #+END_SRC
@@ -218,8 +237,8 @@ print_org_doc(documented_items,link_prefix="All_", header_level=0)
 
   See [[id:c39435d9-532c-4390-8089-bde4c5e53f3e][Multiple parameters in the struct definition]]
   #+END_QUOTE
-  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::85][array.jl:85]], [[2ZKqv4Ic][back to index]]
-  - @@latex:\phantomsection@@ *=aidx_type=*  <<LwCy8wq9>>
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::85][array.jl:85]], [[ho6tOInJ][back to index]]
+  - @@latex:\phantomsection@@ *=aidx_type=*  <<HApKzwQK>>
   #+BEGIN_SRC julia :eval never :exports code
   aidx_type(::Type{AArray{AT,N,P,AIDX}}) where {AT,N,P,AIDX}
   #+END_SRC
@@ -228,8 +247,8 @@ print_org_doc(documented_items,link_prefix="All_", header_level=0)
 
   See [[id:c39435d9-532c-4390-8089-bde4c5e53f3e][Multiple parameters in the struct definition]]
   #+END_QUOTE
-  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::77][array.jl:77]], [[2ZKqv4Ic][back to index]]
-  - @@latex:\phantomsection@@ *=create_tape_chunk=*  <<l85N21ue>>
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::77][array.jl:77]], [[ho6tOInJ][back to index]]
+  - @@latex:\phantomsection@@ *=create_tape_chunk=*  <<pPkkY2Lh>>
   #+BEGIN_SRC julia :eval never :exports code
   function create_tape_chunk(tape::Tape{T},chunk_n::Int) where {T}
   #+END_SRC
@@ -237,8 +256,43 @@ print_org_doc(documented_items,link_prefix="All_", header_level=0)
   This function allocate a chunk of =chunk_n= new [[All_AFloat][struct AFloat]].
   It returns the index of the first one.
   #+END_QUOTE
-  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::57][array.jl:57]], [[2ZKqv4Ic][back to index]]
-  - @@latex:\phantomsection@@ *=getindex=*  <<QnLtuYua>>
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::57][array.jl:57]], [[ho6tOInJ][back to index]]
+  - @@latex:\phantomsection@@ *=create_tape_record=*  <<0i67yetI>>
+  #+BEGIN_SRC julia :eval never :exports code
+  function create_tape_record{T,N}(tape::Tape{T},value::T,dϕ::NTuple{N,∂_j{T}})::AFloat{T}
+  #+END_SRC
+  #+BEGIN_QUOTE
+  Creates a new differential $d\phi = \sum \partial_j d x_j$ and
+  returns the [[All_AFloat][struct AFloat]] associated to $d\phi$.
+  #+END_QUOTE
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::93][tape.jl:93]], [[ho6tOInJ][back to index]]
+   @@latex:\phantomsection@@  <<All_create_tape_record_value>>
+  #+BEGIN_SRC julia :eval never :exports code
+  function create_tape_record{T}(tape::Tape{T},value::T)::AFloat{T}
+  #+END_SRC
+  #+BEGIN_QUOTE
+  Creates a new [[All_AFloat][struct AFloat]]
+  #+END_QUOTE
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::106][tape.jl:106]], [[ho6tOInJ][back to index]]
+  - @@latex:\phantomsection@@ *=export=*  <<neJnUUrp>>
+  #+BEGIN_SRC julia :eval never :exports code
+  export AFloat, afloat_count
+  #+END_SRC
+  #+BEGIN_QUOTE
+  Exported symbols
+  #+END_QUOTE
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::1][tape.jl:1]], [[ho6tOInJ][back to index]]
+  - @@latex:\phantomsection@@ *=f_gradient=*  <<Ux5kI0hb>>
+  #+BEGIN_SRC julia :eval never :exports code
+  function f_gradient{T}(tape::Tape{T},
+			 index::Int,
+			 stop_at_tape_position::Int)
+  #+END_SRC
+  #+BEGIN_QUOTE
+  Computes differential adjoint vector action (reverse mode)
+  #+END_QUOTE
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::153][tape.jl:153]], [[ho6tOInJ][back to index]]
+  - @@latex:\phantomsection@@ *=getindex=*  <<YBk7G9Dj>>
   #+BEGIN_SRC julia :eval never :exports code
   getindex(aa::AArray{AT}, i::Int) where {AT}
   #+END_SRC
@@ -246,8 +300,8 @@ print_org_doc(documented_items,link_prefix="All_", header_level=0)
   *Design*:
   - [[id:1b16ffef-47fa-473c-b033-de4a864dcaf3][Interface, main methods to redefine]]
   #+END_QUOTE
-  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::126][array.jl:126]], [[2ZKqv4Ic][back to index]]
-  - @@latex:\phantomsection@@ *=increase_size!=*  <<qkudidWN>>
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::126][array.jl:126]], [[ho6tOInJ][back to index]]
+  - @@latex:\phantomsection@@ *=increase_size!=*  <<8Ax9xbOe>>
   #+BEGIN_SRC julia :eval never :exports code
   function increase_size!(v::Array{T,1},positive_integer::Int)::Int where {T}
   #+END_SRC
@@ -255,8 +309,8 @@ print_org_doc(documented_items,link_prefix="All_", header_level=0)
   This function increase array size by =positive_integer= and returns
   the initial size
   #+END_QUOTE
-  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::46][array.jl:46]], [[2ZKqv4Ic][back to index]]
-  - @@latex:\phantomsection@@ *=parent=*  <<QHtdBhj7>>
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::46][array.jl:46]], [[ho6tOInJ][back to index]]
+  - @@latex:\phantomsection@@ *=parent=*  <<dWL6E4sL>>
   #+BEGIN_SRC julia :eval never :exports code
   parent(aa::AArray)
   #+END_SRC
@@ -265,8 +319,8 @@ print_org_doc(documented_items,link_prefix="All_", header_level=0)
 
   See [[id:c39435d9-532c-4390-8089-bde4c5e53f3e][Multiple parameters in the struct definition]]
   #+END_QUOTE
-  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::101][array.jl:101]], [[2ZKqv4Ic][back to index]]
-  - @@latex:\phantomsection@@ *=parent_type=*  <<FB8GCKlU>>
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::101][array.jl:101]], [[ho6tOInJ][back to index]]
+  - @@latex:\phantomsection@@ *=parent_type=*  <<uk0HhRrc>>
   #+BEGIN_SRC julia :eval never :exports code
   parent_type(::Type{AArray{AT,N,P,AIDX}}) where {AT,N,P,AIDX}
   #+END_SRC
@@ -275,8 +329,18 @@ print_org_doc(documented_items,link_prefix="All_", header_level=0)
 
   See [[id:c39435d9-532c-4390-8089-bde4c5e53f3e][Multiple parameters in the struct definition]]
   #+END_QUOTE
-  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::93][array.jl:93]], [[2ZKqv4Ic][back to index]]
-  - @@latex:\phantomsection@@ *=size=*  <<3dyeLCZs>>
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::93][array.jl:93]], [[ho6tOInJ][back to index]]
+  - @@latex:\phantomsection@@ *=rewind_tape!=*  <<yP0ZNYK5>> <<All_rewind_tape>>
+  #+BEGIN_SRC julia :eval never :exports code
+  function rewind_tape!{T}(tape::Tape{T},tape_position::Int)
+  #+END_SRC
+  #+BEGIN_QUOTE
+  Rewinds tape
+
+  See: [tape_position[][]]
+  #+END_QUOTE
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::122][tape.jl:122]], [[ho6tOInJ][back to index]]
+  - @@latex:\phantomsection@@ *=size=*  <<1ITvI4op>>
   #+BEGIN_SRC julia :eval never :exports code
   size(aa::AArray)
   #+END_SRC
@@ -284,15 +348,25 @@ print_org_doc(documented_items,link_prefix="All_", header_level=0)
   *Design*:
   - [[id:1b16ffef-47fa-473c-b033-de4a864dcaf3][Interface, main methods to redefine]]
   #+END_QUOTE
-  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::112][array.jl:112]], [[2ZKqv4Ic][back to index]]
-  - @@latex:\phantomsection@@ *=∂_j=*  <<EfT0uGKQ>>
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::112][array.jl:112]], [[ho6tOInJ][back to index]]
+  - @@latex:\phantomsection@@ *=tape_position=*  <<1kHs2oUO>> <<All_tape_position>>
+  #+BEGIN_SRC julia :eval never :exports code
+  tape_position{T}(tape::Tape{T})
+  #+END_SRC
+  #+BEGIN_QUOTE
+  Returns tape position.
+
+  See: [rewind_tape[][]]
+  #+END_QUOTE
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::115][tape.jl:115]], [[ho6tOInJ][back to index]]
+  - @@latex:\phantomsection@@ *=∂_j=*  <<OjgTcZh2>>
   #+BEGIN_SRC julia :eval never :exports code
   struct ∂_j{T<:Real}
   #+END_SRC
   #+BEGIN_QUOTE
   Used to store partial derivatives $\partial_j$
   #+END_QUOTE
-  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::1][tape.jl:1]], [[2ZKqv4Ic][back to index]]
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::7][tape.jl:7]], [[ho6tOInJ][back to index]]
   :END:
 
 * Design remarks 

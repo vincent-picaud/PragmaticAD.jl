@@ -7,5 +7,5 @@
     asize_next = afloat_count(tape)
     
     @test asize_next == asize + length(a)
-#    @test aa[2,3]==a[2,3]
+    @test aa[2,3]==a[2,3]
 end 
