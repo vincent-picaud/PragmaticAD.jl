@@ -42,8 +42,8 @@ end
 # 
 function f_∇f(f::Function, argnum::Int=1) 
 
-#    function typed_local_f_∇f(::Type{T},args...; kwargs...) where {T} 
     function local_f_∇f(args...; kwargs...)
+
         const arg_wrt = args[argnum]
         const T = eltype(arg_wrt)
         
@@ -64,14 +64,4 @@ function f_∇f(f::Function, argnum::Int=1)
     return local_f_∇f
 end
 
-# function f_∇f(f::Function,x::Array{T}) where {T}
-#     check_tape_invariant(get_tape(T))
-#     const tpos = tape_position(get_tape(T))
-#     ax=AArray(x)
-#     ay=f(ax)
-#     grad_ay=f_gradient(ay,tpos)
-#     y=ay.value 
-#     grad_y=map(ax_i->grad_ay[ax_i.j-tpos+1],ax)
-#     rewind_tape!(get_tape(T),tpos)
-#     return y,grad_y
-# end
+
