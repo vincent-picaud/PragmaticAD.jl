@@ -1,0 +1,26 @@
+#+SETUPFILE: ./Setup/setupFile.org
+#+TITLE: Pragmatic automatic differentiation
+#+PROPERTY: header-args:julia :session *pad_session*  :exports code :eval no-export
+#+LATEX_HEADER: \usepackage{stmaryrd}
+
+#+BEGIN_EXPORT latex
+\definecolor{bg}{rgb}{0.95,0.95,0.95}
+\setminted[]{
+  bgcolor=bg,
+  breaklines=true,
+  breakanywhere=true,
+  mathescape,
+  fontsize=\footnotesize}
+#+END_EXPORT
+
+#+BEGIN_SRC julia :exports none
+using Revise
+using PragmaticAD
+using J4Org
+
+initialize_boxing_module(usedModules=["PragmaticAD"])
+#+END_SRC
+
+#+RESULTS:
+
+* Introduction
