@@ -92,8 +92,8 @@ end
 
 # +Tape
 #
-# Creates a new differential $d\phi = \sum \partial_j d x_j$ and
-# returns the [[AFloat][]] associated to $d\phi$.
+# Creates a new differential $d\phi = \sum \partial_j \phi d x_j$ and
+# returns the associated [[AFloat][]].
 #
 function create_tape_record{T,N}(tape::Tape{T},value::T,dϕ::NTuple{N,∂_j{T}})::AFloat{T} 
     const afloat_index = afloat_next_index(tape)
@@ -116,14 +116,23 @@ end
 #
 # Returns tape position.
 #
-# See: [rewind_tape[][]]
+# Usage example:
+#
+# #+BEGIN_SRC julia :eval never
+# tape=PragmaticAD.get_tape(Float64)
+# tpos=PragmaticAD.tape_position(tape)
+# # some computations
+# rewind_tape!(tape,tpos)
+# #+END_SRC
+#
+# See: [[rewind_tape][]]
 tape_position{T}(tape::Tape{T}) = afloat_next_index(tape)
 
 # +Tape L:rewind_tape
 #
 # Rewinds tape
 #
-# See: [tape_position[][]]
+# See: [[tape_position][]]
 #
 function rewind_tape!{T}(tape::Tape{T},tape_position::Int) 
     resize!(tape.i_offset,tape_position)
@@ -180,15 +189,20 @@ f_gradient{T}(y::AFloat{T},stop_at_tape_position::Int)=f_gradient(get_tape(T),y.
 
 
 
-########################
-# Comparison operators #
-########################
+#
+# COMPARISON OPERATORS 
+#
+# See: [[id:66703b8c-0f31-49db-bf41-268758ac27a9][Specialization of common functions]]
+#
+for op = (:(==), :(<))
+    @eval begin
+        import Base: ($op)
+        ($op)(x1::AFloat{T},x2::AFloat{T}) where {T} = ($op)(x1.value,x2.value)
+        ($op)(x1::AFloat{T},x2::Number) where {T} = ($op)(x1.value,x2)
+        ($op)(x1::Number,x2::AFloat{T}) where {T} = ($op)(x1,x2.value)
+    end
+end
 
-import Base: (==)
-
-==(x1::AFloat{T},x2::AFloat{T}) where {T} = (x1.value == x2.value)
-==(x1::AFloat{T},x2::Number) where {T} = (x1.value == x2)
-==(x1::Number,x2::AFloat{T}) where {T} = (x1 == x2.value)
 
 ###################
 # Unary functions #
