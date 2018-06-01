@@ -194,7 +194,7 @@ f_gradient{T}(y::AFloat{T},stop_at_tape_position::Int)=f_gradient(get_tape(T),y.
 #
 # See: [[id:66703b8c-0f31-49db-bf41-268758ac27a9][Specialization of common functions]]
 #
-for op = (:(==), :(<))
+for op = (:(==), :(!=), :(<), :(>), :(<=), :(>=))
     @eval begin
         import Base: ($op)
         ($op)(x1::AFloat{T},x2::AFloat{T}) where {T} = ($op)(x1.value,x2.value)
