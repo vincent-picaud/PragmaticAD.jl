@@ -10,7 +10,10 @@ end
 # Used to store $d\Phi^{(m)}$ using a storage scheme close to the
 # Compressed Row Storage (CRS)
 #
-struct Tape{T<:AbstractFloat}
+# *Note:* we use =mutable= to have a "by reference" semantic to avoid
+#  having a tape copy (which would be catastrophic).
+#
+mutable struct Tape{T<:AbstractFloat}
     i_offset::Vector{Int}
     dϕ::Vector{∂_j{T}}
 end
