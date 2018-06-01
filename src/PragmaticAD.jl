@@ -5,8 +5,9 @@ module PragmaticAD
 include("tape.jl")
 include("afloat.jl")
 include("global.jl")
+include("array.jl")
 include("wrapper.jl")
 include("function.jl")
-include("array.jl")
+
 
 end # module
