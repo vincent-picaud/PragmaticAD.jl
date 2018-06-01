@@ -28,7 +28,8 @@ struct AArray{AT<:AFloat,N,P<:AbstractArray,AIDX}  <: AbstractArray{AT,N}
     #
     # Usage example:
     #
-    # !AArray(rand(2,1))
+    # !AArray(rand(2))
+    # !AArray(rand(2,3))
     #
     # *Design*:
     # - [[id:b384f347-8c27-42ae-9759-2914d67cad4d][Restricted set of constructors]]

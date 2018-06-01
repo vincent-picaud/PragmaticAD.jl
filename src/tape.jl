@@ -1,15 +1,16 @@
 # +API
-#
-# Exported symbols
-export AFloat, afloat_count
+export afloat_count
 
-
-# +Tape, Internal
+# +Tape
 # Used to store partial derivatives $\partial_j$
 struct ∂_j{T<:Real}
     value::T
     j::Int 
 end
+
+# +Tape
+#
+Base.show(io::IO, x::∂_j) = print(io,x.value,"_d^",x.j)
 
 # +Tape, Internal L:Tape 
 #
@@ -37,33 +38,6 @@ function Tape{T<:AbstractFloat}(::Type{T},tape_initial_size::Int = 100)
     return t
 end
 
-
-# +AFloat,API L:AFloat
-#
-# Specialization of number alllowing to track and record operations in the [[Tape][]]
-#
-# - TODO [ ] support complex numbers (use [[https://en.wikipedia.org/wiki/Wirtinger_derivatives][Wirtinger_derivatives]]).
-struct AFloat{T<:AbstractFloat} <: Number
-    value::T
-    j::Int 
-end
-
-# +AFloat,API
-#
-# Creates a new [[AFloat][]] from its value.
-#
-AFloat{T}(value::S) where {T<:AbstractFloat,S<:Real} = create_tape_record(get_tape(T),convert(T,value))
-# +AFloat,API
-AFloat(value::T) where {T<:AbstractFloat} = AFloat{T}(value)
-
-
-
-const AFloat32 = AFloat{Float32}
-tape_Float32 = Tape(Float32)
-get_tape(::Type{Float32}) = tape_Float32
-const AFloat64 = AFloat{Float64}
-tape_Float64 = Tape(Float64)
-get_tape(::Type{Float64}) = tape_Float64
 
 
 
@@ -143,26 +117,7 @@ function rewind_tape!{T}(tape::Tape{T},tape_position::Int)
     return nothing
 end
 
-
-
-# function f_gradient{T}(tape::Tape{T},index::Int)
-#     const n = afloat_count(tape)
-#     grad = zeros(T,n)
-#     grad[index]=1
-#     for i in n:-1:1
-#         const grad_i = grad[i]
-#         if grad_i != T(0)
-#             grad[i] = T(0)
-#             for j in tape.i_offset[i]:tape.i_offset[i+1]-1
-#                 grad[tape.dϕ[j].j] += grad_i*tape.dϕ[j].value
-#             end
-#         end
-#     end
-
-#     return grad
-# end
-
-# +Tape
+# +Tape                                   L:tape_f_gradient
 #
 # Computes differential adjoint vector action (reverse mode)
 #
@@ -187,52 +142,5 @@ function f_gradient{T}(tape::Tape{T},
 
     return grad
 end 
-#f_gradient{T}(y::AFloat{T})=f_gradient(get_tape(T),y.j)
-f_gradient{T}(y::AFloat{T},stop_at_tape_position::Int)=f_gradient(get_tape(T),y.j,stop_at_tape_position)
 
 
-
-#
-# COMPARISON OPERATORS 
-#
-# See: [[id:66703b8c-0f31-49db-bf41-268758ac27a9][Specialization of common functions]]
-#
-# Also: to be compared with ugly C++ macros.
-#
-for op = (:(==), :(!=), :(<), :(>), :(<=), :(>=))
-    @eval begin
-        import Base: ($op)
-        ($op)(x1::AFloat{T},x2::AFloat{T}) where {T} = ($op)(x1.value,x2.value)
-        ($op)(x1::AFloat{T},x2::Real) where {T} = ($op)(x1.value,x2)
-        ($op)(x1::Real,x2::AFloat{T}) where {T} = ($op)(x1,x2.value)
-    end
-end
-
-
-###################
-# Unary functions #
-###################
-
-
-function Base.sin{T}(x::AFloat{T})::AFloat{T}
-    const value = sin(x.value)
-    const dϕ  = (∂_j{T}(cos(x.value),x.j),)
-    return create_tape_record(get_tape(T),value,dϕ)
-end
-
-
-####################
-# Binary operators #
-####################
-
-function Base.:+{T}(x::AFloat{T},y::AFloat{T})::AFloat{T}
-    const value = x.value+y.value
-    const dϕ  = (∂_j{T}(T(1),x.j),∂_j{T}(T(1),y.j))
-    return create_tape_record(get_tape(T),value,dϕ)
-end
-
-function Base.:*{T}(x::AFloat{T},y::AFloat{T})::AFloat{T}
-    const value = x.value*y.value
-    const dϕ  = (∂_j{T}(y.value,x.j),∂_j{T}(x.value,y.j))
-    return create_tape_record(get_tape(T),value,dϕ)
-end
