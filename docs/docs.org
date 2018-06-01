@@ -36,21 +36,54 @@ print_org_doc(documented_items,tag="Tape",header_level=0)
 #+RESULTS:
 :RESULTS:
 
-<<RkepNBoT>> *Index:* *[T]* [[BRXtFhXk][Tape]] *[∂]* [[cJJ6ett3][∂_j]] 
-- @@latex:\phantomsection@@ *=Tape=*  <<BRXtFhXk>>
+<<haAR6n5R>> *Index:* *[T]* [[zXFCV3kx][Tape]] *[a]* [[pg6wTweB][afloat_next_index]] *[∂]* [[o1ZsJ0g6][∂_j]] 
+- @@latex:\phantomsection@@ *=Tape=*  <<zXFCV3kx>>
 #+BEGIN_SRC julia :eval never :exports code
 struct Tape{T<:AbstractFloat}
 #+END_SRC
-[[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::6][tape.jl:6]], [[RkepNBoT][back to index]]
+#+BEGIN_QUOTE
+Used to store $d\Phi^{(m)}$ using a storage scheme close to the
+Compressed Row Storage (CRS)
+#+END_QUOTE
+[[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::8][tape.jl:8]], [[haAR6n5R][back to index]]
 
 #+BEGIN_SRC julia :eval never :exports code
 function Tape{T<:AbstractFloat}(::Type{T},tape_initial_size::Int = 100)
 #+END_SRC
-[[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::11][tape.jl:11]], [[RkepNBoT][back to index]]
-- @@latex:\phantomsection@@ *=∂_j=*  <<cJJ6ett3>>
+#+BEGIN_QUOTE
+Tape constructor
+#+BEGIN_SRC julia
+PragmaticAD.Tape(Float64)
+#+END_SRC
+#+BEGIN_SRC julia
+PragmaticAD.Tape{Float64}([1], PragmaticAD.∂_j{Float64}[])
+#+END_SRC
+#+END_QUOTE
+[[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::18][tape.jl:18]], [[haAR6n5R][back to index]]
+- @@latex:\phantomsection@@ *=afloat_next_index=*  <<pg6wTweB>>
+#+BEGIN_SRC julia :eval never :exports code
+afloat_next_index{T}(tape::Tape{T})::Int
+#+END_SRC
+#+BEGIN_QUOTE
+
+#+END_QUOTE
+[[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::42][tape.jl:42]], [[haAR6n5R][back to index]]
+- @@latex:\phantomsection@@ *=∂_j=*  <<o1ZsJ0g6>>
 #+BEGIN_SRC julia :eval never :exports code
 struct ∂_j{T<:Real}
 #+END_SRC
-[[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::1][tape.jl:1]], [[RkepNBoT][back to index]]
+#+BEGIN_QUOTE
+Used to store partial derivatives $\partial_j$
+#+END_QUOTE
+[[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::1][tape.jl:1]], [[haAR6n5R][back to index]]
 :END:
 
+* Unit tests
+
+#+BEGIN_SRC julia :results output table :exports results
+include("/home/picaud/GitHub/PragmaticAD.jl/test/runtests.jl")
+#+END_SRC
+
+#+RESULTS:
+: Test Summary: | Pass  Total
+: PragmaticAD   |    2      2

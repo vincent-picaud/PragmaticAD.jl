@@ -3,7 +3,9 @@ using Base.Test
 
 @testset "PragmaticAD" begin
 
-#    include("utils.jl")
+    import PragmaticAD: Tape,afloat_next_index,afloat_count
+    
+    include("tape.jl")
 
 end;
 nothing
