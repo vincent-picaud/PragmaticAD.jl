@@ -1,0 +1,28 @@
+#+SETUPFILE: ./Setup/setupFile.org
+#+TITLE: Getting started
+#+PROPERTY: header-args:julia :session *session_ad_gettingStarted*  :exports code :eval no-export
+#+LATEX_HEADER: \usepackage{stmaryrd}
+
+* Introduction
+#+BEGIN_SRC julia 
+using PragmaticAD
+#+END_SRC
+
+#+RESULTS:
+
+** Basic 
+
+#+BEGIN_SRC julia 
+
+f(x,y) = y*sin(x*y)
+af=PragmaticAD.f_∇f(f,2)
+af(2,5.)
+
+# x1 = AFloat(-2.0)
+# x2 = AFloat(3.0)
+# y=x1*x2
+
+
+#+END_SRC
+
+#+RESULTS:
