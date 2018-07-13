@@ -37,7 +37,7 @@ end
 #
 # Scalar example:
 #
-# !f(x,y) = y*sin(x)
+# !f(x::Number,y::Number) = y*sin(x)
 # !af=PragmaticAD.f_∇f(f,2)
 # !af(2,5.)
 #

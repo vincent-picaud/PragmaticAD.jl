@@ -41,11 +41,9 @@ print_org_doc(documented_items,tag="API",header_level=0)
   # =WARNING:= cannot interpret /home/picaud/GitHub/PragmaticAD.jl/src/function.jl:40 AssertionError("code != nothing")
   # =WARNING:= cannot interpret /home/picaud/GitHub/PragmaticAD.jl/src/function.jl:48 AssertionError("code != nothing")
   # =WARNING:= cannot interpret /home/picaud/GitHub/PragmaticAD.jl/src/function.jl:56 AssertionError("code != nothing")
-  debug 5.0 5.0_10
-  debug2 25.0_11
-  # =WARNING:= An error occurred evaluating af(2,5.)
-  <<ypLba4kp>> *Index:* *[A]* [[braQY3Xn][AArray]], [[vTdBi0p3][AFloat]], [[fGrAEBH6][AFloat32]], [[cMfYQQGA][AFloat64]] *[a]* [[zorQhXjo][afloat_count]] *[e]* [[ezojlJgw][export]] *[f]* [[Wil40d89][f_∇f]] 
-  - @@latex:\phantomsection@@ *=AArray=*  <<braQY3Xn>> <<lNrcGGTKAArray>>
+  WARNING: Method definition f(Number, Number) in module BoxingModule at none:1 overwritten at none:1.
+  <<bKfdsey3>> *Index:* *[A]* [[7UteRzeG][AArray]], [[IalWXG1x][AFloat]], [[0pLURSNh][AFloat32]], [[NkjJqxPG][AFloat64]] *[a]* [[772vEIdr][afloat_count]] *[e]* [[CuTOEUVE][export]] *[f]* [[W2fIcMr2][f_∇f]] 
+  - @@latex:\phantomsection@@ *=AArray=*  <<7UteRzeG>> <<UlTaVfiDAArray>>
   #+BEGIN_SRC julia :eval never :exports code
   struct AArray{AT<:AFloat,N,P<:AbstractArray,AIDX}  <: AbstractArray{AT,N}
   #+END_SRC
@@ -54,7 +52,7 @@ print_org_doc(documented_items,tag="API",header_level=0)
 
   *Parameters*:
 
-  - =AIDX= is an extra parameter defining how [[lNrcGGTKAFloat][struct AFloat]] indices are
+  - =AIDX= is an extra parameter defining how [[UlTaVfiDAFloat][struct AFloat]] indices are
     stored. This type can be different from =P=. For instance in case
     of sparse matrix, only an uni-dimensional array to store indices
     associated to non-zero components is required, no need to the
@@ -64,7 +62,7 @@ print_org_doc(documented_items,tag="API",header_level=0)
   - [[id:c39435d9-532c-4390-8089-bde4c5e53f3e][Multiple parameters in the struct definition]]
 
   #+END_QUOTE
-  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::6][array.jl:6]], [[ypLba4kp][back to index]]
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::6][array.jl:6]], [[bKfdsey3][back to index]]
 
   #+BEGIN_SRC julia :eval never :exports code
   function AArray(p::Array{T,N}) where {T<:AbstractFloat,N}
@@ -80,18 +78,18 @@ print_org_doc(documented_items,tag="API",header_level=0)
   #+END_SRC
   #+BEGIN_SRC julia
   2-element PragmaticAD.AArray{PragmaticAD.AFloat{Float64},1,Array{Float64,1},Array{Int64,1}}:
-   0.738301_1
-   0.852408_2
+   0.863691_28
+   0.955985_29
   2×3 PragmaticAD.AArray{PragmaticAD.AFloat{Float64},2,Array{Float64,2},Array{Int64,2}}:
-    0.59686_3  0.647957_5  0.739671_7
-   0.824004_4  0.302086_6  0.359818_8
+   0.126506_30  0.715937_32  0.930913_34
+   0.813784_31  0.601684_33  0.860666_35
   #+END_SRC
 
   *Design*:
   - [[id:b384f347-8c27-42ae-9759-2914d67cad4d][Restricted set of constructors]]
   #+END_QUOTE
-  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::25][array.jl:25]], [[ypLba4kp][back to index]]
-  - @@latex:\phantomsection@@ *=AFloat=*  <<vTdBi0p3>> <<lNrcGGTKAFloat>>
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/array.jl::25][array.jl:25]], [[bKfdsey3][back to index]]
+  - @@latex:\phantomsection@@ *=AFloat=*  <<IalWXG1x>> <<UlTaVfiDAFloat>>
   #+BEGIN_SRC julia :eval never :exports code
   struct AFloat{T<:AbstractFloat} <: Number
   #+END_SRC
@@ -100,56 +98,56 @@ print_org_doc(documented_items,tag="API",header_level=0)
 
   - TODO [ ] support complex numbers (use [[https://en.wikipedia.org/wiki/Wirtinger_derivatives][Wirtinger_derivatives]]).
   #+END_QUOTE
-  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/afloat.jl::4][afloat.jl:4]], [[ypLba4kp][back to index]]
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/afloat.jl::4][afloat.jl:4]], [[bKfdsey3][back to index]]
 
   #+BEGIN_SRC julia :eval never :exports code
   AFloat{T}(value::S) where {T<:AbstractFloat,S<:Real}
   #+END_SRC
   #+BEGIN_QUOTE
-  Creates a new [[lNrcGGTKAFloat][struct AFloat]] from its value.
+  Creates a new [[UlTaVfiDAFloat][struct AFloat]] from its value.
 
   #+BEGIN_SRC julia
   AFloat(-2.0)
   #+END_SRC
   #+BEGIN_SRC julia
-  -2.0_9
+  -2.0_36
   #+END_SRC
   #+END_QUOTE
-  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/afloat.jl::14][afloat.jl:14]], [[ypLba4kp][back to index]]
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/afloat.jl::14][afloat.jl:14]], [[bKfdsey3][back to index]]
 
   #+BEGIN_SRC julia :eval never :exports code
   AFloat(value::T) where {T<:AbstractFloat}
   #+END_SRC
-  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/afloat.jl::21][afloat.jl:21]], [[ypLba4kp][back to index]]
-  - @@latex:\phantomsection@@ *=AFloat32=*  <<fGrAEBH6>>
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/afloat.jl::21][afloat.jl:21]], [[bKfdsey3][back to index]]
+  - @@latex:\phantomsection@@ *=AFloat32=*  <<0pLURSNh>>
   #+BEGIN_SRC julia :eval never :exports code
   const AFloat32
   #+END_SRC
-  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/global.jl::5][global.jl:5]], [[ypLba4kp][back to index]]
-  - @@latex:\phantomsection@@ *=AFloat64=*  <<cMfYQQGA>>
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/global.jl::5][global.jl:5]], [[bKfdsey3][back to index]]
+  - @@latex:\phantomsection@@ *=AFloat64=*  <<NkjJqxPG>>
   #+BEGIN_SRC julia :eval never :exports code
   const AFloat64
   #+END_SRC
-  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/global.jl::9][global.jl:9]], [[ypLba4kp][back to index]]
-  - @@latex:\phantomsection@@ *=afloat_count=*  <<zorQhXjo>>
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/global.jl::9][global.jl:9]], [[bKfdsey3][back to index]]
+  - @@latex:\phantomsection@@ *=afloat_count=*  <<772vEIdr>>
   #+BEGIN_SRC julia :eval never :exports code
   afloat_count{T}(tape::Tape{T})::Int
   #+END_SRC
   #+BEGIN_QUOTE
-  Returns how many [[lNrcGGTKAFloat][struct AFloat]] are stored in the current _struct Tape_
+  Returns how many [[UlTaVfiDAFloat][struct AFloat]] are stored in the current _struct Tape_
   #+END_QUOTE
-  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::51][tape.jl:51]], [[ypLba4kp][back to index]]
-  - @@latex:\phantomsection@@ *=export=*  <<ezojlJgw>>
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::51][tape.jl:51]], [[bKfdsey3][back to index]]
+  - @@latex:\phantomsection@@ *=export=*  <<CuTOEUVE>>
   #+BEGIN_SRC julia :eval never :exports code
   export AFloat
   #+END_SRC
-  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/afloat.jl::1][afloat.jl:1]], [[ypLba4kp][back to index]]
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/afloat.jl::1][afloat.jl:1]], [[bKfdsey3][back to index]]
 
   #+BEGIN_SRC julia :eval never :exports code
   export afloat_count
   #+END_SRC
-  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::1][tape.jl:1]], [[ypLba4kp][back to index]]
-  - @@latex:\phantomsection@@ *=f_∇f=*  <<Wil40d89>>
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/tape.jl::1][tape.jl:1]], [[bKfdsey3][back to index]]
+  - @@latex:\phantomsection@@ *=f_∇f=*  <<W2fIcMr2>>
   #+BEGIN_SRC julia :eval never :exports code
   function f_∇f(f::Function, argnum::Int=1)
   #+END_SRC
@@ -161,19 +159,19 @@ print_org_doc(documented_items,tag="API",header_level=0)
   Scalar example:
 
   #+BEGIN_SRC julia
-  f(x,y) = y*sin(x)
+  f(x::Number,y::Number) = y*sin(x)
   af=PragmaticAD.f_∇f(f,2)
   af(2,5.)
   #+END_SRC
   #+BEGIN_SRC julia
   f (generic function with 1 method)
   (::local_f_∇f) (generic function with 1 method)
-  ***ERROR***  ErrorException("type Float64 has no field value")
+  (4.546487134128409, 0.9092974268256817)
   #+END_SRC
 
 
   #+END_QUOTE
-  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/wrapper.jl::32][wrapper.jl:32]], [[ypLba4kp][back to index]]
+  [[file:/home/picaud/GitHub/PragmaticAD.jl/src/wrapper.jl::32][wrapper.jl:32]], [[bKfdsey3][back to index]]
   :END:
 
 * Internal documentation
