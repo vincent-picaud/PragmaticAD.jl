@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2018-06-04 Mon 13:42 -->
+<!-- 2018-07-13 Fri 20:07 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Pragmatic automatic differentiation</title>
@@ -331,141 +331,43 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgf2c24f2">1. Introduction</a></li>
-<li><a href="#org049091a">2. API documentation</a></li>
-<li><a href="#org820782f">3. Internal documentation</a></li>
-<li><a href="#org1c5ede3">4. Design remarks</a>
+<li><a href="#org77159fc">1. Introduction</a></li>
+<li><a href="#orge3723e2">2. API documentation</a></li>
+<li><a href="#org8e7733a">3. Internal documentation</a></li>
+<li><a href="#org6cc2a23">4. Design remarks</a>
 <ul>
-<li><a href="#org2f3ae68">4.1. Array struct design</a>
+<li><a href="#org14a0be3">4.1. Array struct design</a>
 <ul>
-<li><a href="#org3756530">4.1.1. Multiple parameters in the struct definition</a></li>
-<li><a href="#org647d361">4.1.2. Restricted set of constructors</a></li>
-<li><a href="#org2e5843b">4.1.3. Interface, main methods to redefine</a></li>
+<li><a href="#orga6b9654">4.1.1. Multiple parameters in the struct definition</a></li>
+<li><a href="#orgc920ed8">4.1.2. Restricted set of constructors</a></li>
+<li><a href="#orgf497cea">4.1.3. Interface, main methods to redefine</a></li>
 </ul>
 </li>
-<li><a href="#org2831d1b">4.2. Specialization of common functions</a>
+<li><a href="#orgd539422">4.2. Specialization of common functions</a>
 <ul>
-<li><a href="#orga16b54f">4.2.1. <span class="todo TODO">TODO</span> Overloading ambiguity <code>[0/1]</code></a></li>
-<li><a href="#org145e9e8">4.2.2. Code generator</a></li>
+<li><a href="#org91fbe3d">4.2.1. <span class="todo TODO">TODO</span> Overloading ambiguity <code>[0/1]</code></a></li>
+<li><a href="#org2dfad55">4.2.2. Code generator</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#org633b4fc">5. Unit tests</a></li>
+<li><a href="#org78ed254">5. Unit tests</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgf2c24f2" class="outline-2">
-<h2 id="orgf2c24f2"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-org77159fc" class="outline-2">
+<h2 id="org77159fc"><span class="section-number-2">1</span> Introduction</h2>
 </div>
 
-<div id="outline-container-org049091a" class="outline-2">
-<h2 id="org049091a"><span class="section-number-2">2</span> API documentation</h2>
+<div id="outline-container-orge3723e2" class="outline-2">
+<h2 id="orge3723e2"><span class="section-number-2">2</span> API documentation</h2>
 <div class="outline-text-2" id="text-2">
 <p>
-
-</p>
-
-<p>
-<a id="org107d886"></a> <b>Index:</b> <b>[A]</b> <a href="#org43e68c1">AArray</a>, <a href="#org04bb960">AFloat</a> 
+<a id="org03ee2cf"></a> <b>Index:</b> <b>[A]</b> <a href="#org4aae5df">AArray</a>, <a href="#org42ef11f">AFloat</a>, <a href="#orgaf29df3">AFloat32</a>, <a href="#orgf05d6ff">AFloat64</a> <b>[a]</b> <a href="#orga6609c2">afloat_count</a> <b>[e]</b> <a href="#org5e5b2bf">export</a> <b>[f]</b> <a href="#orgb982e86">f_∇f</a> 
 </p>
 <ul class="org-ul">
-<li><b><code>AArray</code></b>  <a id="org43e68c1"></a> <a id="org5771b32"></a></li>
-</ul>
-<div class="org-src-container">
-<pre class="src src-julia"><span style="color: #a020f0;">struct</span> <span style="color: #228b22;">AArray</span>{AT&lt;:AFloat,N,P&lt;:<span style="color: #228b22;">AbstractArray</span>,AIDX}  &lt;: <span style="color: #228b22;">AbstractArray</span>{AT,N}
-</pre>
-</div>
-<blockquote>
-<p>
-This is the array type to use in place of built-in Julia <code>Array{T,N}</code> types.
-</p>
-
-<p>
-<b>Parameters</b>:
-</p>
-
-<ul class="org-ul">
-<li><code>AIDX</code> is an extra parameter defining how <a href="#org71b6ac5">struct AFloat</a> indices are
-stored. This type can be different from <code>P</code>. For instance in case
-of sparse matrix, only an uni-dimensional array to store indices
-associated to non-zero components is required, no need to the
-store sparsity pattern twice.</li>
-</ul>
-
-<p>
-<b>Design</b>:
-</p>
-<ul class="org-ul">
-<li><a href="#org3756530">Multiple parameters in the struct definition</a></li>
-</ul>
-</blockquote>
-<p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/array.jl#org8f73f89">array.jl:3</a>, <a href="#org107d886">back to index</a>
-</p>
-
-<div class="org-src-container">
-<pre class="src src-julia"><span style="color: #a020f0;">function</span> <span style="color: #0000ff;">AArray</span>(p::<span style="color: #228b22;">Array</span>{T,N}) <span style="color: #a020f0;">where</span> {T&lt;:<span style="color: #228b22;">AbstractFloat</span>,N}
-</pre>
-</div>
-<blockquote>
-<p>
-Construction from an "usual" Julia array of real numbers.
-</p>
-
-<p>
-Usage example:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-julia">AArray(rand(2,1))
-</pre>
-</div>
-
-<div class="org-src-container">
-<pre class="src src-julia">2&#215;1 PragmaticAD.AArray{PragmaticAD.AFloat{<span style="color: #228b22;">Float64</span>},2,<span style="color: #228b22;">Array</span>{<span style="color: #228b22;">Float64</span>,2},<span style="color: #228b22;">Array</span>{<span style="color: #228b22;">Int64</span>,2}}:
- PragmaticAD.AFloat{<span style="color: #228b22;">Float64</span>}(0.575999, 13)
- PragmaticAD.AFloat{<span style="color: #228b22;">Float64</span>}(0.524417, 14)
-</pre>
-</div>
-
-<p>
-<b>Design</b>:
-</p>
-<ul class="org-ul">
-<li><a href="#org647d361">Restricted set of constructors</a></li>
-</ul>
-</blockquote>
-<p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/array.jl#orgae7699f">array.jl:22</a>, <a href="#org107d886">back to index</a>
-</p>
-<ul class="org-ul">
-<li><b><code>AFloat</code></b>  <a id="org04bb960"></a> <a id="org71b6ac5"></a></li>
-</ul>
-<div class="org-src-container">
-<pre class="src src-julia"><span style="color: #a020f0;">struct</span> <span style="color: #228b22;">AFloat</span>{T&lt;:<span style="color: #228b22;">AbstractFloat</span>} &lt;: <span style="color: #228b22;">Real</span>
-</pre>
-</div>
-<blockquote>
-<p>
-Specialization of number alllowing to track and record operations in the <span class="underline">struct Tape</span>
-</p>
-</blockquote>
-<p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#orga2d2290">tape.jl:35</a>, <a href="#org107d886">back to index</a>
-</p>
-</div>
-</div>
-
-<div id="outline-container-org820782f" class="outline-2">
-<h2 id="org820782f"><span class="section-number-2">3</span> Internal documentation</h2>
-<div class="outline-text-2" id="text-3">
-<p>
-<a id="org406776e"></a> <b>Index:</b> <b>[A]</b> <a href="#org3f08ada">AArray</a>, <a href="#orge32a369">AFloat</a>, <a href="#org7d4dce4">AFloat32</a>, <a href="#org2b6f71b">AFloat64</a> <b>[B]</b> <a href="#org8f100bd">Base.push!</a>, <a href="#org7750234">Base.show</a> <b>[I]</b> <a href="#orgf43ffac">IndexStyle</a> <b>[T]</b> <a href="#org9bff4c1">Tape</a> <b>[a]</b> <a href="#org7f490c8">afloat_count</a>, <a href="#org8354cb2">afloat_next_index</a>, <a href="#orga876963">aidx</a>, <a href="#org8e37b16">aidx_type</a> <b>[c]</b> <a href="#org507cd98">create_tape_chunk</a>, <a href="#org9aa996d">create_tape_record</a> <b>[e]</b> <a href="#org3f3046d">export</a> <b>[f]</b> <a href="#org3184c03">f_gradient</a> <b>[g]</b> <a href="#org1b5c765">getindex</a> <b>[i]</b> <a href="#orga010423">increase_size!</a> <b>[p]</b> <a href="#org99f9832">parent</a>, <a href="#org748516a">parent_type</a> <b>[r]</b> <a href="#org473fba5">rewind_tape!</a> <b>[s]</b> <a href="#orgf3a36bd">size</a> <b>[t]</b> <a href="#org943f09a">tape_position</a> <b>[∂]</b> <a href="#org44f7611">∂_j</a> 
-</p>
-<ul class="org-ul">
-<li><b><code>AArray</code></b>  <a id="org3f08ada"></a> <a id="org037fcd7"></a></li>
+<li><b><code>AArray</code></b>  <a id="org4aae5df"></a> <a id="orgbafdc38"></a></li>
 </ul>
 <div class="org-src-container">
 <pre class="src src-julia">  <span style="color: #a020f0;">struct</span> <span style="color: #228b22;">AArray</span>{AT&lt;:AFloat,N,P&lt;:<span style="color: #228b22;">AbstractArray</span>,AIDX}  &lt;: <span style="color: #228b22;">AbstractArray</span>{AT,N}
@@ -481,7 +383,7 @@ This is the array type to use in place of built-in Julia <code>Array{T,N}</code>
 </p>
 
 <ul class="org-ul">
-<li><code>AIDX</code> is an extra parameter defining how <a href="#orgcf9460d">struct AFloat</a> indices are
+<li><code>AIDX</code> is an extra parameter defining how <a href="#org46d1840">struct AFloat</a> indices are
 stored. This type can be different from <code>P</code>. For instance in case
 of sparse matrix, only an uni-dimensional array to store indices
 associated to non-zero components is required, no need to the
@@ -492,11 +394,11 @@ store sparsity pattern twice.</li>
 <b>Design</b>:
 </p>
 <ul class="org-ul">
-<li><a href="#org3756530">Multiple parameters in the struct definition</a></li>
+<li><a href="#orga6b9654">Multiple parameters in the struct definition</a></li>
 </ul>
 </blockquote>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/array.jl#org20ff1e2">array.jl:6</a>, <a href="#org406776e">back to index</a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/array.jl#orgce6550a">array.jl:6</a>, <a href="#org03ee2cf">back to index</a>
 </p>
 
 <div class="org-src-container">
@@ -519,11 +421,11 @@ Usage example:
 </div>
 <div class="org-src-container">
 <pre class="src src-julia">  2-element PragmaticAD.AArray{PragmaticAD.AFloat{<span style="color: #228b22;">Float64</span>},1,<span style="color: #228b22;">Array</span>{<span style="color: #228b22;">Float64</span>,1},<span style="color: #228b22;">Array</span>{<span style="color: #228b22;">Int64</span>,1}}:
-   0.225354_53
-   0.875809_54
+   0.130159_101
+   0.909172_102
   2&#215;3 PragmaticAD.AArray{PragmaticAD.AFloat{<span style="color: #228b22;">Float64</span>},2,<span style="color: #228b22;">Array</span>{<span style="color: #228b22;">Float64</span>,2},<span style="color: #228b22;">Array</span>{<span style="color: #228b22;">Int64</span>,2}}:
-   0.185468_55  0.698521_57  0.396057_59
-   0.520399_56  0.590056_58  0.862143_60
+   0.978537_103  0.453044_105  0.497208_107
+   0.998178_104  0.767827_106  0.444682_108
 </pre>
 </div>
 
@@ -531,14 +433,14 @@ Usage example:
 <b>Design</b>:
 </p>
 <ul class="org-ul">
-<li><a href="#org647d361">Restricted set of constructors</a></li>
+<li><a href="#orgc920ed8">Restricted set of constructors</a></li>
 </ul>
 </blockquote>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/array.jl#org94c97b9">array.jl:25</a>, <a href="#org406776e">back to index</a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/array.jl#orgeca9179">array.jl:25</a>, <a href="#org03ee2cf">back to index</a>
 </p>
 <ul class="org-ul">
-<li><b><code>AFloat</code></b>  <a id="orge32a369"></a> <a id="orgcf9460d"></a></li>
+<li><b><code>AFloat</code></b>  <a id="org42ef11f"></a> <a id="org46d1840"></a></li>
 </ul>
 <div class="org-src-container">
 <pre class="src src-julia">  <span style="color: #a020f0;">struct</span> <span style="color: #228b22;">AFloat</span>{T&lt;:<span style="color: #228b22;">AbstractFloat</span>} &lt;: <span style="color: #228b22;">Number</span>
@@ -546,7 +448,7 @@ Usage example:
 </div>
 <blockquote>
 <p>
-Specialization of number alllowing to track and record operations in the <a href="#orgbec5f80">struct Tape</a>
+Specialization of number alllowing to track and record operations in the <span class="underline">struct Tape</span>
 </p>
 
 <ul class="org-ul">
@@ -554,7 +456,7 @@ Specialization of number alllowing to track and record operations in the <a href
 </ul>
 </blockquote>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/afloat.jl#orga8ee313">afloat.jl:4</a>, <a href="#org406776e">back to index</a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/afloat.jl#orgc38c763">afloat.jl:4</a>, <a href="#org03ee2cf">back to index</a>
 </p>
 
 <div class="org-src-container">
@@ -563,7 +465,7 @@ Specialization of number alllowing to track and record operations in the <a href
 </div>
 <blockquote>
 <p>
-Creates a new <a href="#orgcf9460d">struct AFloat</a> from its value.
+Creates a new <a href="#org46d1840">struct AFloat</a> from its value.
 </p>
 
 <div class="org-src-container">
@@ -571,12 +473,12 @@ Creates a new <a href="#orgcf9460d">struct AFloat</a> from its value.
 </pre>
 </div>
 <div class="org-src-container">
-<pre class="src src-julia">  -2.0_61
+<pre class="src src-julia">  -2.0_109
 </pre>
 </div>
 </blockquote>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/afloat.jl#org8a634c9">afloat.jl:14</a>, <a href="#org406776e">back to index</a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/afloat.jl#org4268863">afloat.jl:14</a>, <a href="#org03ee2cf">back to index</a>
 </p>
 
 <div class="org-src-container">
@@ -584,30 +486,259 @@ Creates a new <a href="#orgcf9460d">struct AFloat</a> from its value.
 </pre>
 </div>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/afloat.jl#org87e72f0">afloat.jl:21</a>, <a href="#org406776e">back to index</a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/afloat.jl#orgecdfaf9">afloat.jl:21</a>, <a href="#org03ee2cf">back to index</a>
 </p>
 <ul class="org-ul">
-<li><b><code>AFloat32</code></b>  <a id="org7d4dce4"></a></li>
+<li><b><code>AFloat32</code></b>  <a id="orgaf29df3"></a></li>
 </ul>
 <div class="org-src-container">
 <pre class="src src-julia">  <span style="color: #a020f0;">const</span> AFloat32
 </pre>
 </div>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/global.jl#org2f8d4fc">global.jl:5</a>, <a href="#org406776e">back to index</a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/global.jl#orge80f460">global.jl:5</a>, <a href="#org03ee2cf">back to index</a>
 </p>
 <ul class="org-ul">
-<li><b><code>AFloat64</code></b>  <a id="org2b6f71b"></a></li>
+<li><b><code>AFloat64</code></b>  <a id="orgf05d6ff"></a></li>
 </ul>
 <div class="org-src-container">
 <pre class="src src-julia">  <span style="color: #a020f0;">const</span> AFloat64
 </pre>
 </div>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/global.jl#orge8e7d4b">global.jl:9</a>, <a href="#org406776e">back to index</a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/global.jl#org7c52ef3">global.jl:9</a>, <a href="#org03ee2cf">back to index</a>
 </p>
 <ul class="org-ul">
-<li><b><code>Base.push!</code></b>  <a id="org8f100bd"></a></li>
+<li><b><code>afloat_count</code></b>  <a id="orga6609c2"></a></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-julia">  afloat_count{T}(tape::<span style="color: #228b22;">Tape</span>{T})::<span style="color: #228b22;">Int</span>
+</pre>
+</div>
+<blockquote>
+<p>
+Returns how many <a href="#org46d1840">struct AFloat</a> are stored in the current <span class="underline">struct Tape</span>
+</p>
+</blockquote>
+<p>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#orga3dff88">tape.jl:51</a>, <a href="#org03ee2cf">back to index</a>
+</p>
+<ul class="org-ul">
+<li><b><code>export</code></b>  <a id="org5e5b2bf"></a></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-julia">  <span style="color: #a020f0;">export</span> AFloat
+</pre>
+</div>
+<p>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/afloat.jl#orgf51a297">afloat.jl:1</a>, <a href="#org03ee2cf">back to index</a>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-julia">  <span style="color: #a020f0;">export</span> afloat_count
+</pre>
+</div>
+<p>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#orgbf19d59">tape.jl:1</a>, <a href="#org03ee2cf">back to index</a>
+</p>
+<ul class="org-ul">
+<li><b><code>f_∇f</code></b>  <a id="orgb982e86"></a></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-julia">  <span style="color: #a020f0;">function</span> <span style="color: #0000ff;">f_</span>&#8711;f(f::<span style="color: #228b22;">Function</span>, argnum::<span style="color: #228b22;">Int</span>=1)
+</pre>
+</div>
+<blockquote>
+<p>
+Wraps a function to compute its value and gradient
+</p>
+
+<p>
+<b>Note</b>: inspired from <a href="https://github.com/denizyuret/AutoGrad.jl/blob/master/src/core.jl">AutoGrad.jl/core.jl</a>
+</p>
+
+<p>
+Scalar example:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-julia">   4+5
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-julia">  9
+</pre>
+</div>
+<p>
+R f(x,y) = y*sin(x)
+R af=PragmaticAD.f_∇f(f,2)
+R af(2,5.)
+</p>
+</blockquote>
+<p>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/wrapper.jl#org258594f">wrapper.jl:30</a>, <a href="#org03ee2cf">back to index</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org8e7733a" class="outline-2">
+<h2 id="org8e7733a"><span class="section-number-2">3</span> Internal documentation</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+
+</p>
+
+<p>
+WARNING: Method definition f(Any, Any) in module BoxingModule at none:1 overwritten at none:1.
+</p>
+
+<p>
+<a id="org5af972e"></a> <b>Index:</b> <b>[A]</b> <a href="#org6f0f06c">AArray</a>, <a href="#orgdc818ea">AFloat</a>, <a href="#orgb9018d5">AFloat32</a>, <a href="#org713c7ac">AFloat64</a> <b>[B]</b> <a href="#org0989492">Base.push!</a>, <a href="#orga521768">Base.show</a> <b>[I]</b> <a href="#org56e9b7c">IndexStyle</a> <b>[T]</b> <a href="#orgd84a03d">Tape</a> <b>[_]</b> <a href="#org6dd02cc">_f_∇f_input_float_to_afloat</a>, <a href="#org64908af">_f_∇f_output_grad</a> <b>[a]</b> <a href="#orgebf7634">afloat_count</a>, <a href="#orgd2e9136">afloat_next_index</a>, <a href="#org6ddf969">aidx</a>, <a href="#org5b8957d">aidx_type</a> <b>[c]</b> <a href="#org96999d0">create_tape_chunk</a>, <a href="#org484f256">create_tape_record</a> <b>[e]</b> <a href="#orgff63be6">export</a> <b>[f]</b> <a href="#org7995e3a">f_gradient</a>, <a href="#org1cf8d50">f_∇f</a> <b>[g]</b> <a href="#org567e1e2">getindex</a> <b>[i]</b> <a href="#orgfcc2b01">increase_size!</a> <b>[p]</b> <a href="#orged53179">parent</a>, <a href="#orgcfcb411">parent_type</a> <b>[r]</b> <a href="#org7a1d0b7">rewind_tape!</a> <b>[s]</b> <a href="#org036b06f">size</a> <b>[t]</b> <a href="#orgb241175">tape_position</a> <b>[∂]</b> <a href="#orge77516b">∂_j</a> 
+</p>
+<ul class="org-ul">
+<li><b><code>AArray</code></b>  <a id="org6f0f06c"></a> <a id="orgc801762"></a></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-julia">  <span style="color: #a020f0;">struct</span> <span style="color: #228b22;">AArray</span>{AT&lt;:AFloat,N,P&lt;:<span style="color: #228b22;">AbstractArray</span>,AIDX}  &lt;: <span style="color: #228b22;">AbstractArray</span>{AT,N}
+</pre>
+</div>
+<blockquote>
+<p>
+This is the array type to use in place of built-in Julia <code>Array{T,N}</code> types.
+</p>
+
+<p>
+<b>Parameters</b>:
+</p>
+
+<ul class="org-ul">
+<li><code>AIDX</code> is an extra parameter defining how <a href="#org842da05">struct AFloat</a> indices are
+stored. This type can be different from <code>P</code>. For instance in case
+of sparse matrix, only an uni-dimensional array to store indices
+associated to non-zero components is required, no need to the
+store sparsity pattern twice.</li>
+</ul>
+
+<p>
+<b>Design</b>:
+</p>
+<ul class="org-ul">
+<li><a href="#orga6b9654">Multiple parameters in the struct definition</a></li>
+</ul>
+</blockquote>
+<p>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/array.jl#orgce6550a">array.jl:6</a>, <a href="#org5af972e">back to index</a>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-julia">  <span style="color: #a020f0;">function</span> <span style="color: #0000ff;">AArray</span>(p::<span style="color: #228b22;">Array</span>{T,N}) <span style="color: #a020f0;">where</span> {T&lt;:<span style="color: #228b22;">AbstractFloat</span>,N}
+</pre>
+</div>
+<blockquote>
+<p>
+Construction from an "usual" Julia array of real numbers.
+</p>
+
+<p>
+Usage example:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-julia">  AArray(rand(2))
+  AArray(rand(2,3))
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-julia">  2-element PragmaticAD.AArray{PragmaticAD.AFloat{<span style="color: #228b22;">Float64</span>},1,<span style="color: #228b22;">Array</span>{<span style="color: #228b22;">Float64</span>,1},<span style="color: #228b22;">Array</span>{<span style="color: #228b22;">Int64</span>,1}}:
+   0.708963_152
+   0.111173_153
+  2&#215;3 PragmaticAD.AArray{PragmaticAD.AFloat{<span style="color: #228b22;">Float64</span>},2,<span style="color: #228b22;">Array</span>{<span style="color: #228b22;">Float64</span>,2},<span style="color: #228b22;">Array</span>{<span style="color: #228b22;">Int64</span>,2}}:
+   0.812261_154  0.293842_156   0.832244_158
+   0.827891_155  0.241933_157  0.0801037_159
+</pre>
+</div>
+
+<p>
+<b>Design</b>:
+</p>
+<ul class="org-ul">
+<li><a href="#orgc920ed8">Restricted set of constructors</a></li>
+</ul>
+</blockquote>
+<p>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/array.jl#orgeca9179">array.jl:25</a>, <a href="#org5af972e">back to index</a>
+</p>
+<ul class="org-ul">
+<li><b><code>AFloat</code></b>  <a id="orgdc818ea"></a> <a id="org842da05"></a></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-julia">  <span style="color: #a020f0;">struct</span> <span style="color: #228b22;">AFloat</span>{T&lt;:<span style="color: #228b22;">AbstractFloat</span>} &lt;: <span style="color: #228b22;">Number</span>
+</pre>
+</div>
+<blockquote>
+<p>
+Specialization of number alllowing to track and record operations in the <a href="#orgc6df711">struct Tape</a>
+</p>
+
+<ul class="org-ul">
+<li>TODO [ ] support complex numbers (use <a href="https://en.wikipedia.org/wiki/Wirtinger_derivatives">Wirtinger_derivatives</a>).</li>
+</ul>
+</blockquote>
+<p>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/afloat.jl#orgc38c763">afloat.jl:4</a>, <a href="#org5af972e">back to index</a>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-julia">  AFloat{T}(value::<span style="color: #228b22;">S</span>) <span style="color: #a020f0;">where</span> {T&lt;:<span style="color: #228b22;">AbstractFloat</span>,S&lt;:<span style="color: #228b22;">Real</span>}
+</pre>
+</div>
+<blockquote>
+<p>
+Creates a new <a href="#org842da05">struct AFloat</a> from its value.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-julia">  AFloat(-2.0)
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-julia">  -2.0_160
+</pre>
+</div>
+</blockquote>
+<p>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/afloat.jl#org4268863">afloat.jl:14</a>, <a href="#org5af972e">back to index</a>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-julia">  AFloat(value::<span style="color: #228b22;">T</span>) <span style="color: #a020f0;">where</span> {T&lt;:<span style="color: #228b22;">AbstractFloat</span>}
+</pre>
+</div>
+<p>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/afloat.jl#orgecdfaf9">afloat.jl:21</a>, <a href="#org5af972e">back to index</a>
+</p>
+<ul class="org-ul">
+<li><b><code>AFloat32</code></b>  <a id="orgb9018d5"></a></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-julia">  <span style="color: #a020f0;">const</span> AFloat32
+</pre>
+</div>
+<p>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/global.jl#orge80f460">global.jl:5</a>, <a href="#org5af972e">back to index</a>
+</p>
+<ul class="org-ul">
+<li><b><code>AFloat64</code></b>  <a id="org713c7ac"></a></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-julia">  <span style="color: #a020f0;">const</span> AFloat64
+</pre>
+</div>
+<p>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/global.jl#org7c52ef3">global.jl:9</a>, <a href="#org5af972e">back to index</a>
+</p>
+<ul class="org-ul">
+<li><b><code>Base.push!</code></b>  <a id="org0989492"></a></li>
 </ul>
 <div class="org-src-container">
 <pre class="src src-julia">  <span style="color: #a020f0;">function</span> Base.<span style="color: #0000ff;">push!</span>{T,N}(v::<span style="color: #228b22;">Array</span>{T,1},x::<span style="color: #228b22;">NTuple</span>{N,T})::<span style="color: #228b22;">Array</span>{T,1}
@@ -619,10 +750,10 @@ A helper function that push a NTuple into an array
 </p>
 </blockquote>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#orge425a53">tape.jl:57</a>, <a href="#org406776e">back to index</a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#orga3f5609">tape.jl:57</a>, <a href="#org5af972e">back to index</a>
 </p>
 <ul class="org-ul">
-<li><b><code>Base.show</code></b>  <a id="org7750234"></a></li>
+<li><b><code>Base.show</code></b>  <a id="orga521768"></a></li>
 </ul>
 <div class="org-src-container">
 <pre class="src src-julia">  Base.show(io::<span style="color: #228b22;">IO</span>, x::<span style="color: #228b22;">AFloat</span>)
@@ -634,7 +765,7 @@ Defines pretty print as explained <a href="https://docs.julialang.org/en/latest/
 </p>
 </blockquote>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/afloat.jl#orgaf3ad1c">afloat.jl:24</a>, <a href="#org406776e">back to index</a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/afloat.jl#org661e71c">afloat.jl:24</a>, <a href="#org5af972e">back to index</a>
 </p>
 
 <div class="org-src-container">
@@ -642,10 +773,10 @@ Defines pretty print as explained <a href="https://docs.julialang.org/en/latest/
 </pre>
 </div>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#org3e196de">tape.jl:11</a>, <a href="#org406776e">back to index</a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#orgf0b6d13">tape.jl:11</a>, <a href="#org5af972e">back to index</a>
 </p>
 <ul class="org-ul">
-<li><b><code>IndexStyle</code></b>  <a id="orgf43ffac"></a></li>
+<li><b><code>IndexStyle</code></b>  <a id="org56e9b7c"></a></li>
 </ul>
 <div class="org-src-container">
 <pre class="src src-julia">  IndexStyle(::<span style="color: #228b22;">Type</span>{&lt;:<span style="color: #228b22;">AArray</span>{AT,N,P,AIDX}}) <span style="color: #a020f0;">where</span> {AT,N,P,AIDX}
@@ -656,14 +787,14 @@ Defines pretty print as explained <a href="https://docs.julialang.org/en/latest/
 <b>Design</b>:
 </p>
 <ul class="org-ul">
-<li><a href="#org2e5843b">Interface, main methods to redefine</a></li>
+<li><a href="#orgf497cea">Interface, main methods to redefine</a></li>
 </ul>
 </blockquote>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/array.jl#org1055cc0">array.jl:120</a>, <a href="#org406776e">back to index</a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/array.jl#orga156c38">array.jl:120</a>, <a href="#org5af972e">back to index</a>
 </p>
 <ul class="org-ul">
-<li><b><code>Tape</code></b>  <a id="org9bff4c1"></a> <a id="orgbec5f80"></a></li>
+<li><b><code>Tape</code></b>  <a id="orgd84a03d"></a> <a id="orgc6df711"></a></li>
 </ul>
 <div class="org-src-container">
 <pre class="src src-julia">  <span style="color: #a020f0;">mutable struct</span> <span style="color: #228b22;">Tape</span>{T&lt;:<span style="color: #228b22;">AbstractFloat</span>}
@@ -681,7 +812,7 @@ Compressed Row Storage (CRS)
 </p>
 </blockquote>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#orge0c1489">tape.jl:15</a>, <a href="#org406776e">back to index</a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#org4ef7159">tape.jl:15</a>, <a href="#org5af972e">back to index</a>
 </p>
 
 <div class="org-src-container">
@@ -702,10 +833,60 @@ Tape constructor
 </div>
 </blockquote>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#orgb2ce260">tape.jl:28</a>, <a href="#org406776e">back to index</a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#org5539f6a">tape.jl:28</a>, <a href="#org5af972e">back to index</a>
 </p>
 <ul class="org-ul">
-<li><b><code>afloat_count</code></b>  <a id="org7f490c8"></a></li>
+<li><b><code>_f_∇f_input_float_to_afloat</code></b>  <a id="org6dd02cc"></a></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-julia">  _f_&#8711;f_input_float_to_afloat(x::<span style="color: #228b22;">Array</span>)
+</pre>
+</div>
+<blockquote>
+<p>
+Transforms regular input into autodiff 
+</p>
+<ul class="org-ul">
+<li>Array -&gt; AArray</li>
+<li>Float -&gt; AFloat</li>
+</ul>
+</blockquote>
+<p>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/wrapper.jl#org2b542e1">wrapper.jl:10</a>, <a href="#org5af972e">back to index</a>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-julia">  _f_&#8711;f_input_float_to_afloat(x::<span style="color: #228b22;">Number</span>)
+</pre>
+</div>
+<p>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/wrapper.jl#org08b3205">wrapper.jl:15</a>, <a href="#org5af972e">back to index</a>
+</p>
+<ul class="org-ul">
+<li><b><code>_f_∇f_output_grad</code></b>  <a id="org64908af"></a></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-julia">  <span style="color: #a020f0;">function</span> <span style="color: #0000ff;">_f_</span>&#8711;f_output_grad(ax::<span style="color: #228b22;">AArray</span>,grad_ay::<span style="color: #228b22;">Array</span>,tpos::<span style="color: #228b22;">Int</span>)
+</pre>
+</div>
+<blockquote>
+<p>
+Transform local gradient into gradient (output)
+</p>
+</blockquote>
+<p>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/wrapper.jl#orgd825ac1">wrapper.jl:18</a>, <a href="#org5af972e">back to index</a>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-julia">  <span style="color: #a020f0;">function</span> <span style="color: #0000ff;">_f_</span>&#8711;f_output_grad(ax::<span style="color: #228b22;">AFloat</span>,grad_ay::<span style="color: #228b22;">Array</span>,tpos::<span style="color: #228b22;">Int</span>)
+</pre>
+</div>
+<p>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/wrapper.jl#org9eb89df">wrapper.jl:25</a>, <a href="#org5af972e">back to index</a>
+</p>
+<ul class="org-ul">
+<li><b><code>afloat_count</code></b>  <a id="orgebf7634"></a></li>
 </ul>
 <div class="org-src-container">
 <pre class="src src-julia">  afloat_count{T}(tape::<span style="color: #228b22;">Tape</span>{T})::<span style="color: #228b22;">Int</span>
@@ -713,14 +894,14 @@ Tape constructor
 </div>
 <blockquote>
 <p>
-Returns how many <a href="#orgcf9460d">struct AFloat</a> are stored in the current <a href="#orgbec5f80">struct Tape</a>
+Returns how many <a href="#org842da05">struct AFloat</a> are stored in the current <a href="#orgc6df711">struct Tape</a>
 </p>
 </blockquote>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#orgd2d2f4b">tape.jl:51</a>, <a href="#org406776e">back to index</a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#orga3dff88">tape.jl:51</a>, <a href="#org5af972e">back to index</a>
 </p>
 <ul class="org-ul">
-<li><b><code>afloat_next_index</code></b>  <a id="org8354cb2"></a></li>
+<li><b><code>afloat_next_index</code></b>  <a id="orgd2e9136"></a></li>
 </ul>
 <div class="org-src-container">
 <pre class="src src-julia">  afloat_next_index{T}(tape::<span style="color: #228b22;">Tape</span>{T})::<span style="color: #228b22;">Int</span>
@@ -728,15 +909,15 @@ Returns how many <a href="#orgcf9460d">struct AFloat</a> are stored in the curre
 </div>
 <blockquote>
 <p>
-Returns a new <a href="#orgcf9460d">struct AFloat</a> index. Generally used at creation time,
-see <a href="#orga98148d">create_tape_record(&#x2026;)</a>
+Returns a new <a href="#org842da05">struct AFloat</a> index. Generally used at creation time,
+see <a href="#org1a38125">create_tape_record(&#x2026;)</a>
 </p>
 </blockquote>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#org8ac9f4f">tape.jl:44</a>, <a href="#org406776e">back to index</a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#org90c70d2">tape.jl:44</a>, <a href="#org5af972e">back to index</a>
 </p>
 <ul class="org-ul">
-<li><b><code>aidx</code></b>  <a id="orga876963"></a></li>
+<li><b><code>aidx</code></b>  <a id="org6ddf969"></a></li>
 </ul>
 <div class="org-src-container">
 <pre class="src src-julia">  aidx(aa::<span style="color: #228b22;">AArray</span>)
@@ -748,14 +929,14 @@ The recommended way to access aidx member
 </p>
 
 <p>
-See <a href="#org3756530">Multiple parameters in the struct definition</a>
+See <a href="#orga6b9654">Multiple parameters in the struct definition</a>
 </p>
 </blockquote>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/array.jl#org088bd39">array.jl:86</a>, <a href="#org406776e">back to index</a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/array.jl#org5cf3847">array.jl:86</a>, <a href="#org5af972e">back to index</a>
 </p>
 <ul class="org-ul">
-<li><b><code>aidx_type</code></b>  <a id="org8e37b16"></a></li>
+<li><b><code>aidx_type</code></b>  <a id="org5b8957d"></a></li>
 </ul>
 <div class="org-src-container">
 <pre class="src src-julia">  aidx_type(::<span style="color: #228b22;">Type</span>{AArray{AT,N,P,AIDX}}) <span style="color: #a020f0;">where</span> {AT,N,P,AIDX}
@@ -767,14 +948,14 @@ The recommended way to access aidx member <b>type</b>
 </p>
 
 <p>
-See <a href="#org3756530">Multiple parameters in the struct definition</a>
+See <a href="#orga6b9654">Multiple parameters in the struct definition</a>
 </p>
 </blockquote>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/array.jl#orgdaf1238">array.jl:78</a>, <a href="#org406776e">back to index</a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/array.jl#org3e6706c">array.jl:78</a>, <a href="#org5af972e">back to index</a>
 </p>
 <ul class="org-ul">
-<li><b><code>create_tape_chunk</code></b>  <a id="org507cd98"></a></li>
+<li><b><code>create_tape_chunk</code></b>  <a id="org96999d0"></a></li>
 </ul>
 <div class="org-src-container">
 <pre class="src src-julia">  <span style="color: #a020f0;">function</span> <span style="color: #0000ff;">create_tape_chunk</span>(tape::<span style="color: #228b22;">Tape</span>{T},chunk_n::<span style="color: #228b22;">Int</span>) <span style="color: #a020f0;">where</span> {T}
@@ -782,15 +963,15 @@ See <a href="#org3756530">Multiple parameters in the struct definition</a>
 </div>
 <blockquote>
 <p>
-This function allocate a chunk of <code>chunk_n</code> new <a href="#orgcf9460d">struct AFloat</a>.
+This function allocate a chunk of <code>chunk_n</code> new <a href="#org842da05">struct AFloat</a>.
 It returns the index of the first one.
 </p>
 </blockquote>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/array.jl#orgc33e1a2">array.jl:58</a>, <a href="#org406776e">back to index</a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/array.jl#org1976c13">array.jl:58</a>, <a href="#org5af972e">back to index</a>
 </p>
 <ul class="org-ul">
-<li><b><code>create_tape_record</code></b>  <a id="org9aa996d"></a></li>
+<li><b><code>create_tape_record</code></b>  <a id="org484f256"></a></li>
 </ul>
 <div class="org-src-container">
 <pre class="src src-julia">  <span style="color: #a020f0;">function</span> <span style="color: #0000ff;">create_tape_record</span>{T,N}(tape::<span style="color: #228b22;">Tape</span>{T},value::<span style="color: #228b22;">T</span>,d&#981;::<span style="color: #228b22;">NTuple</span>{N,&#8706;_j{T}})::<span style="color: #228b22;">AFloat</span>{T}
@@ -799,12 +980,12 @@ It returns the index of the first one.
 <blockquote>
 <p>
 Creates a new differential \(d\phi = \sum \partial_j \phi d x_j\) and
-returns the associated <a href="#orgcf9460d">struct AFloat</a>.
+returns the associated <a href="#org842da05">struct AFloat</a>.
 </p>
 </blockquote>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#org9412267">tape.jl:70</a>, <a href="#org406776e">back to index</a>
-   <a id="orga98148d"></a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#orgad937ac">tape.jl:70</a>, <a href="#org5af972e">back to index</a>
+   <a id="org1a38125"></a>
 </p>
 <div class="org-src-container">
 <pre class="src src-julia">  <span style="color: #a020f0;">function</span> <span style="color: #0000ff;">create_tape_record</span>{T}(tape::<span style="color: #228b22;">Tape</span>{T},value::<span style="color: #228b22;">T</span>)::<span style="color: #228b22;">AFloat</span>{T}
@@ -812,21 +993,21 @@ returns the associated <a href="#orgcf9460d">struct AFloat</a>.
 </div>
 <blockquote>
 <p>
-Creates a new <a href="#orgcf9460d">struct AFloat</a>
+Creates a new <a href="#org842da05">struct AFloat</a>
 </p>
 </blockquote>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#orgebdc547">tape.jl:83</a>, <a href="#org406776e">back to index</a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#org7a97c24">tape.jl:83</a>, <a href="#org5af972e">back to index</a>
 </p>
 <ul class="org-ul">
-<li><b><code>export</code></b>  <a id="org3f3046d"></a></li>
+<li><b><code>export</code></b>  <a id="orgff63be6"></a></li>
 </ul>
 <div class="org-src-container">
 <pre class="src src-julia">  <span style="color: #a020f0;">export</span> AFloat
 </pre>
 </div>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/afloat.jl#orgcb5c197">afloat.jl:1</a>, <a href="#org406776e">back to index</a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/afloat.jl#orgf51a297">afloat.jl:1</a>, <a href="#org5af972e">back to index</a>
 </p>
 
 <div class="org-src-container">
@@ -834,10 +1015,10 @@ Creates a new <a href="#orgcf9460d">struct AFloat</a>
 </pre>
 </div>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#org89b91ec">tape.jl:1</a>, <a href="#org406776e">back to index</a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#orgbf19d59">tape.jl:1</a>, <a href="#org5af972e">back to index</a>
 </p>
 <ul class="org-ul">
-<li><b><code>f_gradient</code></b>  <a id="org3184c03"></a> <a id="orgcf7d1a3"></a></li>
+<li><b><code>f_gradient</code></b>  <a id="org7995e3a"></a> <a id="org9084733"></a></li>
 </ul>
 <div class="org-src-container">
 <pre class="src src-julia">  <span style="color: #a020f0;">function</span> <span style="color: #0000ff;">f_gradient</span>{T}(tape::<span style="color: #228b22;">Tape</span>{T},
@@ -851,7 +1032,7 @@ Computes differential adjoint vector action (reverse mode)
 </p>
 </blockquote>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#org0b0633d">tape.jl:120</a>, <a href="#org406776e">back to index</a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#org3de1103">tape.jl:120</a>, <a href="#org5af972e">back to index</a>
 </p>
 
 <div class="org-src-container">
@@ -860,14 +1041,50 @@ Computes differential adjoint vector action (reverse mode)
 </div>
 <blockquote>
 <p>
-Convenience function that call <a href="#orgcf7d1a3">f_gradient(&#x2026;)</a>
+Convenience function that call <a href="#org9084733">f_gradient(&#x2026;)</a>
 </p>
 </blockquote>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/wrapper.jl#orgc0bbf9f">wrapper.jl:1</a>, <a href="#org406776e">back to index</a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/wrapper.jl#orgfe64bc7">wrapper.jl:5</a>, <a href="#org5af972e">back to index</a>
 </p>
 <ul class="org-ul">
-<li><b><code>getindex</code></b>  <a id="org1b5c765"></a></li>
+<li><b><code>f_∇f</code></b>  <a id="org1cf8d50"></a></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-julia">  <span style="color: #a020f0;">function</span> <span style="color: #0000ff;">f_</span>&#8711;f(f::<span style="color: #228b22;">Function</span>, argnum::<span style="color: #228b22;">Int</span>=1)
+</pre>
+</div>
+<blockquote>
+<p>
+Wraps a function to compute its value and gradient
+</p>
+
+<p>
+<b>Note</b>: inspired from <a href="https://github.com/denizyuret/AutoGrad.jl/blob/master/src/core.jl">AutoGrad.jl/core.jl</a>
+</p>
+
+<p>
+Scalar example:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-julia">   <span style="color: #0000ff;">f</span>(x,y) = y*sin(x,y)
+   af=PragmaticAD.f_&#8711;f(f,2)
+   af(2,5.)
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-julia">  f (generic <span style="color: #a020f0;">function</span> with 1 method)
+  (::<span style="color: #228b22;">local_f_</span>&#8711;f) (generic <span style="color: #a020f0;">function</span> with 1 method)
+  ***ERROR***  MethodError(sin, (2, 5.0_161), 0x00000000000056a5)
+</pre>
+</div>
+</blockquote>
+<p>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/wrapper.jl#org258594f">wrapper.jl:30</a>, <a href="#org5af972e">back to index</a>
+</p>
+<ul class="org-ul">
+<li><b><code>getindex</code></b>  <a id="org567e1e2"></a></li>
 </ul>
 <div class="org-src-container">
 <pre class="src src-julia">  getindex(aa::<span style="color: #228b22;">AArray</span>{AT}, i::<span style="color: #228b22;">Int</span>) <span style="color: #a020f0;">where</span> {AT}
@@ -878,14 +1095,14 @@ Convenience function that call <a href="#orgcf7d1a3">f_gradient(&#x2026;)</a>
 <b>Design</b>:
 </p>
 <ul class="org-ul">
-<li><a href="#org2e5843b">Interface, main methods to redefine</a></li>
+<li><a href="#orgf497cea">Interface, main methods to redefine</a></li>
 </ul>
 </blockquote>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/array.jl#org3798b7a">array.jl:127</a>, <a href="#org406776e">back to index</a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/array.jl#org2712bee">array.jl:127</a>, <a href="#org5af972e">back to index</a>
 </p>
 <ul class="org-ul">
-<li><b><code>increase_size!</code></b>  <a id="orga010423"></a></li>
+<li><b><code>increase_size!</code></b>  <a id="orgfcc2b01"></a></li>
 </ul>
 <div class="org-src-container">
 <pre class="src src-julia">  <span style="color: #a020f0;">function</span> <span style="color: #0000ff;">increase_size!</span>(v::<span style="color: #228b22;">Array</span>{T,1},positive_integer::<span style="color: #228b22;">Int</span>)::<span style="color: #228b22;">Int</span> <span style="color: #a020f0;">where</span> {T}
@@ -898,10 +1115,10 @@ the initial size
 </p>
 </blockquote>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/array.jl#orgd594ba6">array.jl:47</a>, <a href="#org406776e">back to index</a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/array.jl#org9bdc203">array.jl:47</a>, <a href="#org5af972e">back to index</a>
 </p>
 <ul class="org-ul">
-<li><b><code>parent</code></b>  <a id="org99f9832"></a></li>
+<li><b><code>parent</code></b>  <a id="orged53179"></a></li>
 </ul>
 <div class="org-src-container">
 <pre class="src src-julia">  parent(aa::<span style="color: #228b22;">AArray</span>)
@@ -913,14 +1130,14 @@ The recommended way to access parent membe
 </p>
 
 <p>
-See <a href="#org3756530">Multiple parameters in the struct definition</a>
+See <a href="#orga6b9654">Multiple parameters in the struct definition</a>
 </p>
 </blockquote>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/array.jl#orgd0b5a9e">array.jl:102</a>, <a href="#org406776e">back to index</a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/array.jl#org03be867">array.jl:102</a>, <a href="#org5af972e">back to index</a>
 </p>
 <ul class="org-ul">
-<li><b><code>parent_type</code></b>  <a id="org748516a"></a></li>
+<li><b><code>parent_type</code></b>  <a id="orgcfcb411"></a></li>
 </ul>
 <div class="org-src-container">
 <pre class="src src-julia">  parent_type(::<span style="color: #228b22;">Type</span>{AArray{AT,N,P,AIDX}}) <span style="color: #a020f0;">where</span> {AT,N,P,AIDX}
@@ -932,14 +1149,14 @@ The recommended way to access parent member <b>type</b>
 </p>
 
 <p>
-See <a href="#org3756530">Multiple parameters in the struct definition</a>
+See <a href="#orga6b9654">Multiple parameters in the struct definition</a>
 </p>
 </blockquote>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/array.jl#org0be8044">array.jl:94</a>, <a href="#org406776e">back to index</a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/array.jl#org67a460a">array.jl:94</a>, <a href="#org5af972e">back to index</a>
 </p>
 <ul class="org-ul">
-<li><b><code>rewind_tape!</code></b>  <a id="org473fba5"></a> <a id="org1067428"></a></li>
+<li><b><code>rewind_tape!</code></b>  <a id="org7a1d0b7"></a> <a id="org4b9464a"></a></li>
 </ul>
 <div class="org-src-container">
 <pre class="src src-julia">  <span style="color: #a020f0;">function</span> <span style="color: #0000ff;">rewind_tape!</span>{T}(tape::<span style="color: #228b22;">Tape</span>{T},tape_position::<span style="color: #228b22;">Int</span>)
@@ -951,14 +1168,14 @@ Rewinds tape
 </p>
 
 <p>
-See: <a href="#orgbef6ac8">tape_position(&#x2026;)</a>
+See: <a href="#orgcb193fb">tape_position(&#x2026;)</a>
 </p>
 </blockquote>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#org4802a5b">tape.jl:108</a>, <a href="#org406776e">back to index</a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#org71a8156">tape.jl:108</a>, <a href="#org5af972e">back to index</a>
 </p>
 <ul class="org-ul">
-<li><b><code>size</code></b>  <a id="orgf3a36bd"></a></li>
+<li><b><code>size</code></b>  <a id="org036b06f"></a></li>
 </ul>
 <div class="org-src-container">
 <pre class="src src-julia">  size(aa::<span style="color: #228b22;">AArray</span>)
@@ -969,14 +1186,14 @@ See: <a href="#orgbef6ac8">tape_position(&#x2026;)</a>
 <b>Design</b>:
 </p>
 <ul class="org-ul">
-<li><a href="#org2e5843b">Interface, main methods to redefine</a></li>
+<li><a href="#orgf497cea">Interface, main methods to redefine</a></li>
 </ul>
 </blockquote>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/array.jl#org6c5e054">array.jl:113</a>, <a href="#org406776e">back to index</a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/array.jl#orge2808d1">array.jl:113</a>, <a href="#org5af972e">back to index</a>
 </p>
 <ul class="org-ul">
-<li><b><code>tape_position</code></b>  <a id="org943f09a"></a> <a id="orgbef6ac8"></a></li>
+<li><b><code>tape_position</code></b>  <a id="orgb241175"></a> <a id="orgcb193fb"></a></li>
 </ul>
 <div class="org-src-container">
 <pre class="src src-julia">  tape_position{T}(tape::<span style="color: #228b22;">Tape</span>{T})
@@ -1000,14 +1217,14 @@ Usage example:
 </div>
 
 <p>
-See: <a href="#org1067428">rewind_tape!(&#x2026;)</a>
+See: <a href="#org4b9464a">rewind_tape!(&#x2026;)</a>
 </p>
 </blockquote>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#org6abeaae">tape.jl:92</a>, <a href="#org406776e">back to index</a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#orga408354">tape.jl:92</a>, <a href="#org5af972e">back to index</a>
 </p>
 <ul class="org-ul">
-<li><b><code>∂_j</code></b>  <a id="org44f7611"></a></li>
+<li><b><code>∂_j</code></b>  <a id="orge77516b"></a></li>
 </ul>
 <div class="org-src-container">
 <pre class="src src-julia">  <span style="color: #a020f0;">struct</span> &#8706;_j{T&lt;:<span style="color: #228b22;">Real</span>}
@@ -1019,17 +1236,17 @@ Used to store partial derivatives \(\partial_j\)
 </p>
 </blockquote>
 <p>
-<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#orgd9831a9">tape.jl:4</a>, <a href="#org406776e">back to index</a>
+<a href="file:///home/picaud/GitHub/PragmaticAD.jl/src/tape.jl#orgc737e7a">tape.jl:4</a>, <a href="#org5af972e">back to index</a>
 </p>
 </div>
 </div>
 
-<div id="outline-container-org1c5ede3" class="outline-2">
-<h2 id="org1c5ede3"><span class="section-number-2">4</span> Design remarks</h2>
+<div id="outline-container-org6cc2a23" class="outline-2">
+<h2 id="org6cc2a23"><span class="section-number-2">4</span> Design remarks</h2>
 <div class="outline-text-2" id="text-4">
 </div>
-<div id="outline-container-org2f3ae68" class="outline-3">
-<h3 id="org2f3ae68"><span class="section-number-3">4.1</span> Array struct design</h3>
+<div id="outline-container-org14a0be3" class="outline-3">
+<h3 id="org14a0be3"><span class="section-number-3">4.1</span> Array struct design</h3>
 <div class="outline-text-3" id="text-4-1">
 <p>
 The global design has been inspired from these Julia packages:
@@ -1040,11 +1257,11 @@ The global design has been inspired from these Julia packages:
 </ul>
 </div>
 
-<div id="outline-container-org3756530" class="outline-4">
-<h4 id="org3756530"><a id="ID-c39435d9-532c-4390-8089-bde4c5e53f3e"></a><span class="section-number-4">4.1.1</span> Multiple parameters in the struct definition</h4>
+<div id="outline-container-orga6b9654" class="outline-4">
+<h4 id="orga6b9654"><a id="ID-c39435d9-532c-4390-8089-bde4c5e53f3e"></a><span class="section-number-4">4.1.1</span> Multiple parameters in the struct definition</h4>
 <div class="outline-text-4" id="text-4-1-1">
 <p>
-The <a href="#org037fcd7">AArray</a> class can possibly have a quite large number of parameters
+The <a href="#orgc801762">AArray</a> class can possibly have a quite large number of parameters
 (here <code>T,N,AIDX,O</code>). In order to decouple this parametrization from
 the future method implementations we use the following guideline.
 </p>
@@ -1079,8 +1296,8 @@ functions like
 </div>
 </div>
 
-<div id="outline-container-org647d361" class="outline-4">
-<h4 id="org647d361"><a id="ID-b384f347-8c27-42ae-9759-2914d67cad4d"></a><span class="section-number-4">4.1.2</span> Restricted set of constructors</h4>
+<div id="outline-container-orgc920ed8" class="outline-4">
+<h4 id="orgc920ed8"><a id="ID-b384f347-8c27-42ae-9759-2914d67cad4d"></a><span class="section-number-4">4.1.2</span> Restricted set of constructors</h4>
 <div class="outline-text-4" id="text-4-1-2">
 <p>
 There are a lot of Array types in Julia 
@@ -1135,8 +1352,8 @@ Stacktrace:
 </div>
 </div>
 
-<div id="outline-container-org2e5843b" class="outline-4">
-<h4 id="org2e5843b"><a id="ID-1b16ffef-47fa-473c-b033-de4a864dcaf3"></a><span class="section-number-4">4.1.3</span> Interface, main methods to redefine</h4>
+<div id="outline-container-orgf497cea" class="outline-4">
+<h4 id="orgf497cea"><a id="ID-1b16ffef-47fa-473c-b033-de4a864dcaf3"></a><span class="section-number-4">4.1.3</span> Interface, main methods to redefine</h4>
 <div class="outline-text-4" id="text-4-1-3">
 <p>
 Methods to implement can be found <a href="https://docs.julialang.org/en/stable/manual/interfaces/#man-interface-array-1">here</a> (official julia doc)
@@ -1148,7 +1365,7 @@ The idea is to reuse as much a possible <code>parent</code>'s methods.
 </div>
 
 <ol class="org-ol">
-<li><a id="orgb5f9d15"></a><a id="ID-ffb7408e-cb7b-4c7e-a1f8-39c3af3d37d5"></a>Remark<br />
+<li><a id="orgc270c00"></a><a id="ID-ffb7408e-cb7b-4c7e-a1f8-39c3af3d37d5"></a>Remark<br />
 <div class="outline-text-5" id="text-4-1-3-1">
 <p>
 CAVEAT: my first attempt was to write <code>getindex(parent(aa),I)</code> as follows:
@@ -1177,7 +1394,7 @@ The correct form is:
 </div>
 </li>
 
-<li><a id="org6846bd3"></a><span class="todo TODO">TODO</span> <code>[0/1]</code><br />
+<li><a id="org6a2713c"></a><span class="todo TODO">TODO</span> <code>[0/1]</code><br />
 <div class="outline-text-5" id="text-4-1-3-2">
 <ul class="org-ul">
 <li class="off"><code>[&#xa0;]</code> implement:</li>
@@ -1193,13 +1410,13 @@ end
 </div>
 </div>
 
-<div id="outline-container-org2831d1b" class="outline-3">
-<h3 id="org2831d1b"><a id="ID-66703b8c-0f31-49db-bf41-268758ac27a9"></a><span class="section-number-3">4.2</span> Specialization of common functions</h3>
+<div id="outline-container-orgd539422" class="outline-3">
+<h3 id="orgd539422"><a id="ID-66703b8c-0f31-49db-bf41-268758ac27a9"></a><span class="section-number-3">4.2</span> Specialization of common functions</h3>
 <div class="outline-text-3" id="text-4-2">
 </div>
 
-<div id="outline-container-orga16b54f" class="outline-4">
-<h4 id="orga16b54f"><span class="section-number-4">4.2.1</span> <span class="todo TODO">TODO</span> Overloading ambiguity <code>[0/1]</code></h4>
+<div id="outline-container-org91fbe3d" class="outline-4">
+<h4 id="org91fbe3d"><span class="section-number-4">4.2.1</span> <span class="todo TODO">TODO</span> Overloading ambiguity <code>[0/1]</code></h4>
 <div class="outline-text-4" id="text-4-2-1">
 <ul class="org-ul">
 <li class="off"><code>[&#xa0;]</code> understand <b>exactly</b> why</li>
@@ -1233,8 +1450,8 @@ The right way to do things seems to be:
 </div>
 </div>
 
-<div id="outline-container-org145e9e8" class="outline-4">
-<h4 id="org145e9e8"><span class="section-number-4">4.2.2</span> Code generator</h4>
+<div id="outline-container-org2dfad55" class="outline-4">
+<h4 id="org2dfad55"><span class="section-number-4">4.2.2</span> Code generator</h4>
 <div class="outline-text-4" id="text-4-2-2">
 <p>
 Instead of:
@@ -1282,12 +1499,14 @@ and not
 </div>
 </div>
 
-<div id="outline-container-org633b4fc" class="outline-2">
-<h2 id="org633b4fc"><span class="section-number-2">5</span> Unit tests</h2>
+<div id="outline-container-org78ed254" class="outline-2">
+<h2 id="org78ed254"><span class="section-number-2">5</span> Unit tests</h2>
 <div class="outline-text-2" id="text-5">
 <pre class="example">
+WARNING: Method definition f_∇f(Function) in module PragmaticAD at /home/picaud/GitHub/PragmaticAD.jl/src/wrapper.jl:45 overwritten at /home/picaud/GitHub/PragmaticAD.jl/src/wrapper.jl:45.
+WARNING: Method definition f_∇f(Function, Int64) in module PragmaticAD at /home/picaud/GitHub/PragmaticAD.jl/src/wrapper.jl:45 overwritten at /home/picaud/GitHub/PragmaticAD.jl/src/wrapper.jl:45.
 Test Summary: | Pass  Total
-PragmaticAD   |    2      2
+PragmaticAD   |    9      9
 
 </pre>
 </div>
@@ -1295,7 +1514,7 @@ PragmaticAD   |    2      2
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: picaud</p>
-<p class="date">Created: 2018-06-04 Mon 13:42</p>
+<p class="date">Created: 2018-07-13 Fri 20:07</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

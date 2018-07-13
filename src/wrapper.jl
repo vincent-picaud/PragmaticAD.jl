@@ -1,3 +1,5 @@
+# This file defines function wrapper
+#
 export f_∇f
 
 
@@ -35,9 +37,9 @@ end
 #
 # Scalar example:
 #
-# f(x,y) = y*sin(x)
-# af=PragmaticAD.f_∇f(f,2)
-# af(2,5.)
+# !f(x,y) = y*sin(x)
+# !af=PragmaticAD.f_∇f(f,2)
+# !af(2,5.)
 #
 # 
 function f_∇f(f::Function, argnum::Int=1) 
@@ -51,10 +53,11 @@ function f_∇f(f::Function, argnum::Int=1)
 
         tpos = tape_position(get_tape(T))
         args = Any[args...] # to make args writable
-        println("debug $arg_wrt $(_f_∇f_input_float_to_afloat(arg_wrt))")
+
         args[argnum] = _f_∇f_input_float_to_afloat(arg_wrt)
-        println("debug2 $(args...)")
+
         ay=f(args...,kwargs...)
+
         grad_ay=f_gradient(ay,tpos)
         y=ay.value
         grad_y=_f_∇f_output_grad(args[argnum],grad_ay,tpos)
