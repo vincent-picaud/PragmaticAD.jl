@@ -13,7 +13,7 @@ f_gradient{T}(y::AFloat{T},stop_at_tape_position::Int)=f_gradient(get_tape(T),y.
 # - Float -> AFloat
 _f_∇f_input_float_to_afloat(x::Array) = AArray(x)
 # +Internal
-_f_∇f_input_float_to_afloat(x::Number) = AFloat(x)
+_f_∇f_input_float_to_afloat(x::Real) = AFloat(x)
 
 # +Internal
 # Transform local gradient into gradient (output)
@@ -24,7 +24,7 @@ function _f_∇f_output_grad(ax::AArray,grad_ay::Array,tpos::Int)
 end 
 # +Internal
 function _f_∇f_output_grad(ax::AFloat,grad_ay::Array,tpos::Int)
-!    return grad_ay[ax.j-tpos+1]
+    return grad_ay[ax.j-tpos+1]
 end
 
 # +API
@@ -35,23 +35,25 @@ end
 #
 # Scalar example:
 #
-# ! f(x,y) = y*sin(x,y)
-# ! af=PragmaticAD.f_∇f(f,2)
-# ! af(2,5.)
+# f(x,y) = y*sin(x)
+# af=PragmaticAD.f_∇f(f,2)
+# af(2,5.)
 #
 # 
 function f_∇f(f::Function, argnum::Int=1) 
 
     function local_f_∇f(args...; kwargs...)
 
-        const arg_wrt = args[argnum]
-        const T = eltype(arg_wrt)
+        arg_wrt = args[argnum]
+        T = eltype(arg_wrt)
         
         #  check_tape_invariant(get_tape(T))
 
-        const tpos = tape_position(get_tape(T))
+        tpos = tape_position(get_tape(T))
         args = Any[args...] # to make args writable
+        println("debug $arg_wrt $(_f_∇f_input_float_to_afloat(arg_wrt))")
         args[argnum] = _f_∇f_input_float_to_afloat(arg_wrt)
+        println("debug2 $(args...)")
         ay=f(args...,kwargs...)
         grad_ay=f_gradient(ay,tpos)
         y=ay.value
