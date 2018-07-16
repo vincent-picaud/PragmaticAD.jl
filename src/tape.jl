@@ -10,7 +10,7 @@ end
 
 # +Tape
 #
-Base.show(io::IO, x::∂_j) = print(io,x.value,"_d^",x.j)
+Base.show(io::IO, x::∂_j) = print(io,"\partial_{v$(x.j)}ϕ=$(x.value)")
 
 # +Tape, Internal L:Tape 
 #
